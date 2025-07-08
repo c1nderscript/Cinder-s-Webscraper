@@ -1,5 +1,5 @@
 # Application dependencies
-schedule
+schedule==1.2.2
 
 # Development dependencies
-pytest
+pytest==8.4.0
