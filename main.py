@@ -19,10 +19,12 @@ logger = get_logger(__name__)
 
 
 def main() -> None:
-    """Run the simple command-line scheduler demo with error handling."""
+    """Run the simple command-line scheduler demo with persistence and error handling."""
 
     manager = ScheduleManager()
-    manager.add_task("dummy", dummy_job, 5)
+
+    if not manager.list_tasks():
+        manager.add_task("dummy", dummy_job, 5)
 
     print("Scheduler started. Press Ctrl+C to exit.")
     try:
@@ -35,6 +37,8 @@ def main() -> None:
         print("An unexpected error occurred. See log for details.")
         logger.error("Unhandled exception in CLI")
         logger.error(traceback.format_exc())
+    finally:
+        manager.close()
 
 
 if __name__ == "__main__":
