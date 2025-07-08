@@ -5,7 +5,7 @@
 
 ## Project Overview
 
-A GUI-based web scraper application for Windows systems built with Python. The application enables users to configure, schedule, and manage web scraping tasks through an intuitive interface. Configuration files are stored in JSON format.
+A GUI-based web scraper application for Windows systems built with Python. The application enables users to configure, schedule, and manage web scraping tasks through an intuitive interface. Configuration files are stored in JSON format and saved under the `data/` directory.
 
 This repository contains a minimal scheduling example using the [`schedule`](https://pypi.org/project/schedule/) package.
 
@@ -18,12 +18,20 @@ This repository contains a minimal scheduling example using the [`schedule`](htt
 pip install -r requirements.txt
 ```
 
+## Data Directory
+
+Configuration, schedules and log files are stored in the `data/` folder:
+
+- `data/websites.json` – website configuration managed by `config_manager`
+- `data/schedules.db` – SQLite database created by the scheduler
+- `data/logs/` – directory for application log files
+
 ## Configuration Helpers
 
 The `config_manager` module offers two helper functions:
 
-- `load_config(path)` – Load a configuration from a file. If the file does not exist or contains invalid JSON, a default configuration is returned.
-- `save_config(data, path)` – Save a configuration dictionary to the specified path.
+- `load_config(path=None)` – Load a configuration from a file. If ``path`` is omitted or the file does not exist, a default configuration is returned.
+- `save_config(data, path=None)` – Save a configuration dictionary to ``path``. When ``path`` is omitted the data is written to `data/websites.json`.
 
 Example usage:
 
@@ -31,13 +39,13 @@ Example usage:
 from src.utils.config_manager import load_config, save_config
 
 # Load configuration or get defaults
-config = load_config("data/config.json")
+config = load_config()
 
 # Modify configuration as needed
 config["settings"]["debug"] = True
 
 # Save the updated configuration
-save_success = save_config(config, "data/config.json")
+save_success = save_config(config)
 ```
 
 ## Usage
