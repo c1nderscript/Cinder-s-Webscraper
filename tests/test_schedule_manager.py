@@ -14,7 +14,11 @@ def test_add_task(tmp_path):
     job = manager.add_task("task1", dummy, 1)
     assert job in schedule.jobs
     assert manager.list_tasks()["task1"] is job
+
+    assert manager.get_schedule("task1") == {"name": "task1", "interval": 1}
+=======
     manager.close()
+
 
 
 def test_remove_task(tmp_path):
@@ -25,6 +29,13 @@ def test_remove_task(tmp_path):
     assert manager.remove_task("task1") is True
     assert job not in schedule.jobs
     assert manager.list_tasks() == {}
+
+    assert manager.get_schedule("task1") is None
+
+
+def test_list_tasks_multiple(tmp_path):
+    schedule.clear()
+
     manager.close()
 
 
@@ -40,6 +51,7 @@ def test_list_tasks_multiple():
 def test_list_tasks_multiple(tmp_path):
 
     schedule.clear()
+
     db = tmp_path / "sched.db"
     manager = ScheduleManager(db_path=str(db))
     job1 = manager.add_task("task1", dummy, 1)
@@ -49,6 +61,29 @@ def test_list_tasks_multiple(tmp_path):
     assert tasks["task1"] is job1
     assert tasks["task2"] is job2
 
+
+
+def test_crud_operations(tmp_path):
+    schedule.clear()
+    db = tmp_path / "sched.db"
+    manager = ScheduleManager(db_path=str(db))
+
+    # create
+    manager.create_schedule("task1", 5)
+    assert manager.get_schedule("task1") == {"name": "task1", "interval": 5}
+
+    # update
+    assert manager.update_schedule("task1", 10) is True
+    assert manager.get_schedule("task1") == {"name": "task1", "interval": 10}
+
+    # list
+    manager.create_schedule("task2", 3)
+    schedules = manager.list_schedules()
+    assert {s["name"] for s in schedules} == {"task1", "task2"}
+
+    # delete
+    assert manager.delete_schedule("task1") is True
+    assert manager.get_schedule("task1") is None
 
 
 def test_run_pending(monkeypatch):
@@ -106,3 +141,4 @@ def test_removed_task_not_loaded(tmp_path):
     schedule.clear()
     manager2 = ScheduleManager(db_path=str(db))
     assert manager2.list_tasks() == {}
+
