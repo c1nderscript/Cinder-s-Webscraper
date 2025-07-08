@@ -14,8 +14,7 @@ from bs4 import BeautifulSoup
 from .content_extractor import ContentExtractor
 from .output_manager import OutputManager
 
-logger = logging.getLogger(__name__)
-
+from src.utils.logger import default_logger as logger
 
 class ScraperEngine:
     """Download pages and extract data using provided helpers with retry support."""
@@ -64,6 +63,7 @@ class ScraperEngine:
         """
         for attempt in range(1, self.retries + 1):
             try:
+                logger.log(f"Scraping URL: {url} (attempt {attempt})")
                 time.sleep(self.delay)
 
                 response: Response = self.session.get(url, timeout=self.timeout)
@@ -77,11 +77,11 @@ class ScraperEngine:
                 return response.text
 
             except RequestException as exc:
-                logger.error("Request failed for %s (attempt %s): %s", url, attempt, exc)
+                logger.error(f"Request failed for {url} (attempt {attempt}): {exc}")
                 if attempt == self.retries:
                     return None
             except Exception as exc:  # pylint: disable=broad-except
-                logger.error("Unexpected error scraping %s: %s", url, exc)
+                logger.error(f"Unexpected error scraping {url}: {exc}")
                 return None
 
         return None

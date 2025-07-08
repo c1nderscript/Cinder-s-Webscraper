@@ -6,13 +6,17 @@ import time
 import traceback
 
 from src.scheduling.schedule_manager import ScheduleManager
+
+from src.utils.logger import default_logger as logger
+
 from src.utils.logger import get_logger
+
 
 
 def dummy_job() -> None:
     """Example job that prints a message."""
 
-    print("Dummy job executed")
+    logger.log("Dummy job executed")
 
 
 logger = get_logger(__name__)
@@ -26,12 +30,15 @@ def main() -> None:
     if not manager.list_tasks():
         manager.add_task("dummy", dummy_job, 5)
 
-    print("Scheduler started. Press Ctrl+C to exit.")
+    logger.log("Scheduler started. Press Ctrl+C to exit.")
     try:
         while True:
             manager.run_pending()
             time.sleep(1)
     except KeyboardInterrupt:
+
+        logger.log("Scheduler stopped.")
+
         print("\nScheduler stopped.")
     except Exception as exc:  # pragma: no cover - runtime errors
         print("An unexpected error occurred. See log for details.")

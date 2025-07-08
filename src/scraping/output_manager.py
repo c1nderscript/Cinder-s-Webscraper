@@ -8,6 +8,8 @@ import os
 from pathlib import Path
 from typing import Any
 
+from src.utils.logger import default_logger as logger
+
 
 class OutputManager:
     """Persist scraped data to files inside the ``output`` directory."""
@@ -34,6 +36,10 @@ class OutputManager:
             bool: ``True`` if the file was written successfully, ``False``
             otherwise.
         """
+
+        logger.log(f"Saving data to {path}")
+        # Actual saving logic would go here
+
 
         dest = Path(path)
         if not dest.is_absolute():
@@ -70,3 +76,4 @@ class OutputManager:
             return True
         except OSError:
             return False
+
