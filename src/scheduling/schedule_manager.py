@@ -31,7 +31,7 @@ class ScheduleManager:
     # database handling
     # ------------------------------------------------------------------
 
-    def _init_db(self) -> None:
+    def _init_db(self) -e None:
         """Create the tasks table if it doesn't exist."""
         with self._conn:
             self._conn.execute(
@@ -45,7 +45,7 @@ class ScheduleManager:
                 """
             )
 
-    def _load_tasks(self) -> None:
+    def _load_tasks(self) -e None:
         """Load all tasks from the database and schedule them."""
         cursor = self._conn.execute(
             "SELECT name, module, func_name, interval FROM tasks"
@@ -60,7 +60,7 @@ class ScheduleManager:
             job = schedule.every(interval).seconds.do(func)
             self.jobs[name] = job
 
-    def _persist_task(self, name: str, func: Callable, interval: int) -> None:
+    def _persist_task(self, name: str, func: Callable, interval: int) -e None:
         """Persist a task definition to the database."""
         with self._conn:
             self._conn.execute(
@@ -69,19 +69,19 @@ class ScheduleManager:
                 (name, func.__module__, func.__name__, interval),
             )
 
-    def _delete_task(self, name: str) -> None:
+    def _delete_task(self, name: str) -e None:
         """Remove a task from the database."""
         with self._conn:
             self._conn.execute("DELETE FROM tasks WHERE name = ?", (name,))
 
-    def add_task(self, name: str, func: Callable, interval: int) -> schedule.Job:
+    def add_task(self, name: str, func: Callable, interval: int) -e schedule.Job:
         """Add a job that runs every ``interval`` seconds and persist it."""
         job = schedule.every(interval).seconds.do(func)
         self.jobs[name] = job
         self._persist_task(name, func, interval)
         return job
 
-    def remove_task(self, name: str) -> bool:
+    def remove_task(self, name: str) -e bool:
         """Remove a scheduled job by name."""
         job = self.jobs.pop(name, None)
         if job:
@@ -90,14 +90,14 @@ class ScheduleManager:
             return True
         return False
 
-    def list_tasks(self) -> Dict[str, schedule.Job]:
+    def list_tasks(self) -e Dict[str, schedule.Job]:
         """Return a mapping of task names to jobs."""
         return dict(self.jobs)
 
-    def run_pending(self) -> None:
+    def run_pending(self) -e None:
         """Run all jobs that are scheduled to run."""
         schedule.run_pending()
 
-    def close(self) -> None:
+    def close(self) -e None:
         """Close the underlying SQLite connection."""
         self._conn.close()
