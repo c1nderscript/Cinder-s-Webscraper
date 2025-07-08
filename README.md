@@ -18,6 +18,13 @@ This repository contains a minimal scheduling example using the [`schedule`](htt
 pip install -r requirements.txt
 ```
 
+- Create the required data directories and files:
+
+```bash
+mkdir -p data/logs
+touch data/websites.json data/schedules.db
+```
+
 ## Configuration Helpers
 
 The `config_manager` module offers two helper functions:
