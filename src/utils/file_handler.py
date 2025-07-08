@@ -5,8 +5,17 @@ from __future__ import annotations
 import os
 
 
+from pathlib import Path
+
+from .logger import default_logger as logger
+
+
 class FileHandler:
+
+    """Utility wrapper around standard file operations."""
+
     """High-level helper for reading and writing text files."""
+
 
     def read(self, path: str) -> str:
         """Read a file and return its contents.
@@ -23,6 +32,15 @@ class FileHandler:
             OSError: For any other I/O related errors.
         """
         try:
+
+            with open(path, "r", encoding="utf-8") as fp:
+                content = fp.read()
+            logger.log(f"Read file: {path}")
+            return content
+        except OSError as exc:
+            logger.log(f"Failed to read file {path}: {exc}")
+            raise
+
             with open(path, "r", encoding="utf-8") as fh:
                 return fh.read()
         except FileNotFoundError:
@@ -31,6 +49,7 @@ class FileHandler:
             raise
         except OSError as exc:
             raise OSError(f"Failed to read '{path}'") from exc
+
 
     def write(self, path: str, data: str) -> None:
         """Write ``data`` to ``path``.
@@ -46,6 +65,15 @@ class FileHandler:
             OSError: For any other I/O related errors.
         """
         try:
+
+            Path(path).parent.mkdir(parents=True, exist_ok=True)
+            with open(path, "w", encoding="utf-8") as fp:
+                fp.write(data)
+            logger.log(f"Wrote file: {path}")
+        except OSError as exc:
+            logger.log(f"Failed to write file {path}: {exc}")
+            raise
+
             os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
             with open(path, "w", encoding="utf-8") as fh:
                 fh.write(data)
@@ -53,3 +81,4 @@ class FileHandler:
             raise
         except OSError as exc:
             raise OSError(f"Failed to write to '{path}'") from exc
+

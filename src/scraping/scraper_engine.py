@@ -9,6 +9,7 @@ import requests
 from requests import Response
 from requests.exceptions import RequestException
 
+from src.utils.logger import default_logger as logger
 
 class ScraperEngine:
     """Fetch pages from the web with basic rate limiting."""
@@ -36,6 +37,10 @@ class ScraperEngine:
             The raw HTML on success, otherwise ``None``.
         """
 
+        logger.log(f"Scraping URL: {url}")
+        # Actual scraping logic would go here
+
+
         try:
             response: Response = self.session.get(url, timeout=10)
             response.raise_for_status()
@@ -44,3 +49,4 @@ class ScraperEngine:
             return None
         finally:
             time.sleep(self.delay)
+

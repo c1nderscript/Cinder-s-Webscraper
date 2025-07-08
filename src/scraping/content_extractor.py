@@ -6,6 +6,7 @@ from typing import Any, Dict, List, Optional
 
 from bs4 import BeautifulSoup
 
+from src.utils.logger import default_logger as logger
 
 class ContentExtractor:
     """Parse HTML and return structured data or text from selected elements."""
@@ -50,6 +51,10 @@ class ContentExtractor:
                 ``text`` (str): Visible text extracted from the ``<body>``
                     element, or the entire document if no body exists.
         """
+
+        logger.log("Extracting content from HTML")
+        # Actual extraction logic would go here
+
         soup = BeautifulSoup(html, "html.parser")
 
         title: Optional[str] = None
@@ -70,3 +75,4 @@ class ContentExtractor:
             "images": images,
             "text": text,
         }
+

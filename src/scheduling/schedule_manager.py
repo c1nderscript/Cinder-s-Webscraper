@@ -14,6 +14,8 @@ import os
 import sqlite3
 from typing import Callable, Dict
 
+from src.utils.logger import default_logger as logger
+
 
 import schedule
 
@@ -94,11 +96,15 @@ class ScheduleManager:
         """Add a job that runs every ``interval`` seconds and persist it."""
         job = schedule.every(interval).seconds.do(func)
         self.jobs[name] = job
+
+        logger.log(f"Added task '{name}' to run every {interval} seconds")
+
         with self.conn:
             self.conn.execute(
                 "INSERT OR REPLACE INTO schedules (name, interval) VALUES (?, ?)",
                 (name, interval),
             )
+
         return job
 
     def remove_task(self, name: str) -> bool:
@@ -183,17 +189,23 @@ class ScheduleManager:
         job = self.jobs.pop(name, None)
         if job:
             schedule.cancel_job(job)
+            logger.log(f"Removed task '{name}'")
+
             self._delete_task(name)
 
+
             return True
+        logger.log(f"Attempted to remove unknown task '{name}'")
         return False
 
     def list_tasks(self) -e Dict[str, schedule.Job]:
         """Return a mapping of task names to jobs."""
+        logger.log("Listing scheduled tasks")
         return dict(self.jobs)
 
     def run_pending(self) -e None:
         """Run all jobs that are scheduled to run."""
+        logger.log("Running pending scheduled tasks")
         schedule.run_pending()
 
     def close(self) -e None:
