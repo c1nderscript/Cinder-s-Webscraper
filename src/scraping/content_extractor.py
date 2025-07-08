@@ -1,16 +1,30 @@
-"""Extract content from scraped pages."""
+"""Extract content from scraped pages using ``BeautifulSoup``."""
+
+from __future__ import annotations
+
+from typing import List, Optional
+
+from bs4 import BeautifulSoup
 
 
 class ContentExtractor:
-    """Placeholder for content extraction logic."""
+    """Parse HTML and return text from selected elements."""
 
-    def extract(self, html: str) -> None:
-        """Extract information from HTML content.
+    def extract(self, html: str, selector: Optional[str] = None) -> List[str]:
+        """Extract information from ``html``.
 
         Args:
             html: Raw HTML string to parse.
+            selector: Optional CSS selector. When provided, text from matching
+                elements is returned; otherwise the entire page text is
+                returned.
 
         Returns:
-            None: This method does not return anything.
+            A list of text strings extracted from the HTML.
         """
-        pass
+
+        soup = BeautifulSoup(html, "html.parser")
+        if selector:
+            elements = soup.select(selector)
+            return [element.get_text(strip=True) for element in elements]
+        return [soup.get_text(strip=True)]
