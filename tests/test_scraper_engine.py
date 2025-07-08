@@ -23,6 +23,7 @@ class DummyOutput(OutputManager):
     def save(self, data, path):
         self.data = data
         self.path = path
+        return True
 
 
 def test_scrape_success(tmp_path):
@@ -39,7 +40,7 @@ def test_scrape_success(tmp_path):
         data = engine.scrape("http://example.com", str(tmp_path / "out.json"))
 
     assert mock_get.called
-    assert data == {"title": "Example"}
+    assert data == html
     assert output.data == {"title": "Example"}
 
 
@@ -57,3 +58,28 @@ def test_scrape_retries(tmp_path):
     # ensure two attempts were made
     assert mock_get.call_count == 2
     assert output.data is None
+
+
+def test_scraper_engine_scrape_returns_content():
+    """Test that scraper engine can successfully fetch content."""
+    engine = ScraperEngine(delay=0)
+    result = engine.scrape('http://example.com')
+    # Should return HTML content, not None, for a valid URL
+    assert result is not None
+    assert isinstance(result, str)
+    assert 'Example Domain' in result  # example.com contains this text
+
+
+def test_scraper_engine_scrape_returns_none_for_invalid_url():
+    """Test that scraper engine returns None for invalid URLs."""
+    engine = ScraperEngine(delay=0)
+    result = engine.scrape('http://invalid-url-that-does-not-exist-12345.com')
+    # Should return None for invalid URLs
+    assert result is None
+
+
+def test_scraper_engine_scrape_working_url():
+    engine = ScraperEngine(delay=0)
+    content = engine.scrape('http://example.com')
+    assert '<html>' in content 
+    assert '<title>Example Domain</title>' in content

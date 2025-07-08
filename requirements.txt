@@ -1,7 +1,10 @@
 # Application dependencies
-schedule
+
+schedule==1.2.2
 requests
 beautifulsoup4
 
 # Development dependencies
-pytest
+pytest==8.4.0
+pytest-cov
+

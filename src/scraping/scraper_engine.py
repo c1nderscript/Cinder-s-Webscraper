@@ -1,4 +1,4 @@
-"""Core scraping engine."""
+"""Core scraping engine using ``requests``."""
 
 from __future__ import annotations
 
@@ -7,6 +7,8 @@ import time
 from typing import Any, Dict, Optional
 
 import requests
+from requests import Response
+from requests.exceptions import RequestException
 from bs4 import BeautifulSoup
 
 from .content_extractor import ContentExtractor
@@ -16,13 +18,14 @@ logger = logging.getLogger(__name__)
 
 
 class ScraperEngine:
-    """Download pages and extract data using provided helpers."""
+    """Download pages and extract data using provided helpers with retry support."""
 
     def __init__(
         self,
-        extractor: ContentExtractor,
-        output_manager: OutputManager,
+        extractor: Optional[ContentExtractor] = None,
+        output_manager: Optional[OutputManager] = None,
         config: Optional[Dict[str, Any]] = None,
+        delay: float = 1.0,
     ) -> None:
         """Initialize the engine with dependencies and configuration.
 
@@ -31,43 +34,49 @@ class ScraperEngine:
             output_manager: ``OutputManager`` instance for persisting data.
             config: Optional configuration dictionary. Supported keys are
                 ``user_agent``, ``delay``, ``timeout``, and ``retries``.
+            delay: Seconds to wait between requests (fallback if not in config).
         """
-
-        self.extractor = extractor
-        self.output_manager = output_manager
+        self.extractor = extractor or ContentExtractor()
+        self.output_manager = output_manager or OutputManager()
         self.config = config or {}
 
         self.session = requests.Session()
         self.session.headers.update(
             {"User-Agent": self.config.get("user_agent", "Cinder Web Scraper 1.0")}
         )
-        self.delay: float = float(self.config.get("delay", 1))
+        self.delay: float = float(self.config.get("delay", delay))
         self.timeout: int = int(self.config.get("timeout", 30))
         self.retries: int = int(self.config.get("retries", 3))
 
-    def scrape(self, url: str, output_path: str) -> Optional[Any]:
-        """Scrape ``url`` and store parsed results.
+    def scrape(self, url: str, output_path: Optional[str] = None) -> Optional[str]:
+        """Scrape ``url`` and return the HTML content with retry support.
+
+        The method respects the configured request delay and handles common
+        network errors gracefully. If output_path is provided, extracted data
+        is also saved.
 
         Args:
             url: The target URL to scrape.
-            output_path: File path where extracted content should be saved.
+            output_path: Optional file path where extracted content should be saved.
 
         Returns:
-            Parsed data from the extractor, or ``None`` if scraping fails.
+            The raw HTML on success, otherwise ``None``.
         """
-
         for attempt in range(1, self.retries + 1):
             try:
                 time.sleep(self.delay)
 
-                response = self.session.get(url, timeout=self.timeout)
+                response: Response = self.session.get(url, timeout=self.timeout)
                 response.raise_for_status()
 
-                data = self._extract_data(response.text)
-                self.output_manager.save(data, output_path)
-                return data
+                # If output_path is provided, extract and save data
+                if output_path:
+                    data = self._extract_data(response.text)
+                    self.output_manager.save(data, output_path)
 
-            except requests.RequestException as exc:  # noqa: E501 - long error string
+                return response.text
+
+            except RequestException as exc:
                 logger.error("Request failed for %s (attempt %s): %s", url, attempt, exc)
                 if attempt == self.retries:
                     return None
@@ -79,7 +88,5 @@ class ScraperEngine:
 
     def _extract_data(self, html: str) -> Any:
         """Parse ``html`` content and delegate extraction."""
-
         soup = BeautifulSoup(html, "html.parser")
         return self.extractor.extract(str(soup))
-
