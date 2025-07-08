@@ -40,4 +40,3 @@ def save_config(data: Dict[str, Any], path: str) -> bool:
         return True
     except OSError:
         return False
-
