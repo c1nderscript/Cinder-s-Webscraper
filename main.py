@@ -12,10 +12,12 @@ def dummy_job() -> None:
 
 
 def main() -> None:
-    """Run the simple command-line scheduler demo."""
+    """Run the simple command-line scheduler demo with persistence."""
 
     manager = ScheduleManager()
-    manager.add_task("dummy", dummy_job, 5)
+
+    if not manager.list_tasks():
+        manager.add_task("dummy", dummy_job, 5)
 
     print("Scheduler started. Press Ctrl+C to exit.")
     try:
@@ -24,6 +26,8 @@ def main() -> None:
             time.sleep(1)
     except KeyboardInterrupt:
         print("\nScheduler stopped.")
+    finally:
+        manager.close()
 
 
 if __name__ == "__main__":
