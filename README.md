@@ -5,7 +5,7 @@
 
 ## Project Overview
 
-A GUI-based web scraper application for Windows systems built with Python. The application enables users to configure, schedule, and manage web scraping tasks through an intuitive interface.
+A GUI-based web scraper application for Windows systems built with Python. The application enables users to configure, schedule, and manage web scraping tasks through an intuitive interface. Configuration files are stored in JSON format.
 
 ## Installation
 
@@ -14,6 +14,28 @@ A GUI-based web scraper application for Windows systems built with Python. The a
 
 ```bash
 pip install -r requirements.txt
+```
+
+## Configuration Helpers
+
+The `config_manager` module offers two helper functions:
+
+- `load_config(path)` – Load a configuration from a file. If the file does not exist or contains invalid JSON, a default configuration is returned.
+- `save_config(data, path)` – Save a configuration dictionary to the specified path.
+
+Example usage:
+
+```python
+from src.utils.config_manager import load_config, save_config
+
+# Load configuration or get defaults
+config = load_config("data/config.json")
+
+# Modify configuration as needed
+config["settings"]["debug"] = True
+
+# Save the updated configuration
+save_success = save_config(config, "data/config.json")
 ```
 
 ## Usage
