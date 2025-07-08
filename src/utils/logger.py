@@ -19,6 +19,29 @@ logging.basicConfig(
 )
 
 
+class Logger:
+    """Logger class for compatibility with tests."""
+    
+    def __init__(self, name: str | None = None) -> None:
+        """Initialize the Logger.
+        
+        Args:
+            name: Name of the logger.
+        """
+        self._logger = logging.getLogger(name)
+    
+    def log(self, message: str) -> None:
+        """Log a message.
+        
+        Args:
+            message: Text message to log.
+            
+        Returns:
+            None: This method does not return anything.
+        """
+        self._logger.info(message)
+
+
 def get_logger(name: str | None = None) -> logging.Logger:
     """Return a configured logger instance."""
 
@@ -36,4 +59,3 @@ def log_exception(logger: logging.Logger, message: str, exc: Exception) -> None:
 
     logger.error(message)
     logger.exception(exc)
-
