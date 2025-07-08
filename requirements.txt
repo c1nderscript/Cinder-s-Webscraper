@@ -1,5 +1,6 @@
 # Application dependencies
 schedule
+beautifulsoup4
 
 # Development dependencies
 pytest
