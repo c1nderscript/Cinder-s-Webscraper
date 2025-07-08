@@ -1,6 +1,6 @@
 # Cinder's Web Scraper
 
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](#)
+[![CI](https://github.com/OWNER/Cinder-s-Webscraper/actions/workflows/python.yml/badge.svg)](https://github.com/OWNER/Cinder-s-Webscraper/actions/workflows/python.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue)](#license)
 
 ## Project Overview
