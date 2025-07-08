@@ -1,4 +1,5 @@
 import schedule
+
 from src.scheduling.schedule_manager import ScheduleManager
 
 

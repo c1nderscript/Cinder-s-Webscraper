@@ -1,7 +1,8 @@
 """High-level interface for managing recurring tasks."""
 
-import schedule
 from typing import Callable, Dict
+
+import schedule
 
 
 class ScheduleManager:
@@ -31,4 +32,3 @@ class ScheduleManager:
     def run_pending(self) -> None:
         """Run all jobs that are scheduled to run."""
         schedule.run_pending()
-

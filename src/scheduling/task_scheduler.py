@@ -8,13 +8,11 @@ class TaskScheduler:
 
     def __init__(self) -> None:
         """Initialize the scheduler."""
-        self.tasks: List[
-            Tuple[Callable[..., Any], Tuple[Any, ...], Dict[str, Any]]
-        ] = []
+        self.tasks: List[Tuple[Callable[..., Any], Tuple[Any, ...], Dict[str, Any]]] = (
+            []
+        )
 
-    def add_task(
-        self, func: Callable[..., Any], *args: Any, **kwargs: Any
-    ) -> None:
+    def add_task(self, func: Callable[..., Any], *args: Any, **kwargs: Any) -> None:
         """Add a task callable with arguments.
 
         Args:
