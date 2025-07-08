@@ -2,10 +2,20 @@
 
 
 class MainWindow:
-    """Placeholder for the main application window."""
+    """Main application window placeholder."""
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize the main window instance.
+
+        Returns:
+            None: This method does not return anything.
+        """
         pass
 
-    def show(self):
+    def show(self) -> None:
+        """Display the main window.
+
+        Returns:
+            None: This method does not return anything.
+        """
         pass

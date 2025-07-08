@@ -2,7 +2,15 @@
 
 
 class Logger:
-    """Placeholder for logging."""
+    """Placeholder logger implementation."""
 
-    def log(self, message: str):
+    def log(self, message: str) -> None:
+        """Log a message.
+
+        Args:
+            message: Text message to log.
+
+        Returns:
+            None: This method does not return anything.
+        """
         pass
