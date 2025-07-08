@@ -24,6 +24,7 @@ def test_load_malformed(tmp_path):
     assert loaded == config_manager.DEFAULT_CONFIG
 
 
+
 def test_load_config_oserror(monkeypatch):
     def raise_os_error(*args, **kwargs):
         raise OSError
@@ -40,3 +41,18 @@ def test_save_config_failure(monkeypatch, tmp_path):
     monkeypatch.setattr('builtins.open', raise_os_error)
     success = config_manager.save_config({}, str(tmp_path / 'out.json'))
     assert success is False
+
+def test_default_path(tmp_path, monkeypatch):
+    data = {"foo": "bar"}
+    default_path = tmp_path / "default.json"
+    monkeypatch.setattr(config_manager, "DEFAULT_CONFIG_PATH", str(default_path))
+    monkeypatch.setattr(config_manager.load_config, "__defaults__", (str(default_path),))
+    monkeypatch.setattr(config_manager.save_config, "__defaults__", (str(default_path),))
+
+    # Should save to the patched default path
+    assert config_manager.save_config(data) is True
+    assert default_path.exists()
+
+    loaded = config_manager.load_config()
+    assert loaded == data
+
