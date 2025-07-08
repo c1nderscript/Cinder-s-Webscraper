@@ -18,7 +18,6 @@ class ScheduleManager:
 
         The SQLite database is created automatically if it does not exist.
         """
-
         self.db_path = db_path
         os.makedirs(os.path.dirname(self.db_path) or ".", exist_ok=True)
 
@@ -34,7 +33,6 @@ class ScheduleManager:
 
     def _init_db(self) -> None:
         """Create the tasks table if it doesn't exist."""
-
         with self._conn:
             self._conn.execute(
                 """
@@ -49,7 +47,6 @@ class ScheduleManager:
 
     def _load_tasks(self) -> None:
         """Load all tasks from the database and schedule them."""
-
         cursor = self._conn.execute(
             "SELECT name, module, func_name, interval FROM tasks"
         )
@@ -65,7 +62,6 @@ class ScheduleManager:
 
     def _persist_task(self, name: str, func: Callable, interval: int) -> None:
         """Persist a task definition to the database."""
-
         with self._conn:
             self._conn.execute(
                 "INSERT OR REPLACE INTO tasks (name, module, func_name, interval)"
@@ -75,13 +71,11 @@ class ScheduleManager:
 
     def _delete_task(self, name: str) -> None:
         """Remove a task from the database."""
-
         with self._conn:
             self._conn.execute("DELETE FROM tasks WHERE name = ?", (name,))
 
     def add_task(self, name: str, func: Callable, interval: int) -> schedule.Job:
         """Add a job that runs every ``interval`` seconds and persist it."""
-
         job = schedule.every(interval).seconds.do(func)
         self.jobs[name] = job
         self._persist_task(name, func, interval)
@@ -106,6 +100,4 @@ class ScheduleManager:
 
     def close(self) -> None:
         """Close the underlying SQLite connection."""
-
         self._conn.close()
-
