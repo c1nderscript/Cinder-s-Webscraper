@@ -44,10 +44,12 @@ class ContentExtractor:
 
         Returns:
             Dict[str, Any]: A mapping with the following keys:
-                ``title`` (Optional[str]): The contents of the ``<title>`` tag if
-                    present, otherwise ``None``.
-                ``links`` (List[str]): All ``href`` attributes from ``<a>`` tags.
-                ``images`` (List[str]): All ``src`` attributes from ``<img>`` tags.
+                ``title`` (Optional[str]): The contents of the ``<title>``
+                    tag if present, otherwise ``None``.
+                ``links`` (List[str]): All ``href`` attributes from ``<a>``
+                    tags.
+                ``images`` (List[str]): All ``src`` attributes from ``<img>``
+                    tags.
                 ``text`` (str): Visible text extracted from the ``<body>``
                     element, or the entire document if no body exists.
         """
@@ -61,8 +63,10 @@ class ContentExtractor:
         if soup.title and soup.title.string:
             title = soup.title.string.strip()
 
-        links: List[str] = [a["href"] for a in soup.find_all("a") if a.get("href")]
-        images: List[str] = [img["src"] for img in soup.find_all("img") if img.get("src")]
+        links: List[str] = [a["href"] for a in soup.find_all("a")
+                            if a.get("href")]
+        images: List[str] = [img["src"] for img in soup.find_all("img")
+                             if img.get("src")]
 
         if soup.body:
             text = soup.body.get_text(separator=" ", strip=True)
