@@ -9,14 +9,17 @@ from .logger import default_logger as logger
 # Default configuration used when loading fails or no file is found
 DEFAULT_CONFIG: Dict[str, Any] = {
     "websites": [],
-    "settings": {}
+    "settings": {},
 }
 
-def load_config(path: str) -> Dict[str, Any]:
+# Default path for the websites configuration file
+DEFAULT_CONFIG_PATH = os.path.join("data", "websites.json")
+
+def load_config(path: str = DEFAULT_CONFIG_PATH) -> Dict[str, Any]:
     """Load configuration from ``path`` in JSON format.
 
     If the file does not exist or contains invalid JSON, ``DEFAULT_CONFIG`` is
-    returned instead.
+    returned instead. ``path`` defaults to :data:`DEFAULT_CONFIG_PATH`.
     """
     try:
         with open(path, "r", encoding="utf-8") as fp:
@@ -36,11 +39,12 @@ def load_config(path: str) -> Dict[str, Any]:
         # Any other file-related error also results in default config
         return DEFAULT_CONFIG.copy()
 
-def save_config(data: Dict[str, Any], path: str) -> bool:
+def save_config(data: Dict[str, Any], path: str = DEFAULT_CONFIG_PATH) -> bool:
     """Save ``data`` as JSON to ``path``.
 
     The directory is created if it does not exist. Returns ``True`` if the
-    configuration was saved successfully, otherwise ``False``.
+    configuration was saved successfully, otherwise ``False``. ``path`` defaults
+    to :data:`DEFAULT_CONFIG_PATH`.
     """
     try:
         os.makedirs(os.path.dirname(path) or '.', exist_ok=True)
