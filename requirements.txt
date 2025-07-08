@@ -1,5 +1,5 @@
 # Application dependencies
 schedule
 
-[dev]
+# Development dependencies
 pytest
