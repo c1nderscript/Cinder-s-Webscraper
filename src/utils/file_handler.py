@@ -13,7 +13,7 @@ class FileHandler:
         Returns:
             str: The contents of the file.
         """
-        pass
+        return None
 
     def write(self, path: str, data: str) -> None:
         """Write ``data`` to ``path``.
@@ -25,4 +25,4 @@ class FileHandler:
         Returns:
             None: This method does not return anything.
         """
-        pass
+        return None
