@@ -18,12 +18,29 @@ def test_load_missing(tmp_path):
 
 
 def test_load_malformed(tmp_path):
-    """Load a file containing malformed JSON and ensure defaults are returned."""
     path = tmp_path / "malformed.json"
     path.write_text("{ invalid json [")
     loaded = config_manager.load_config(str(path))
     assert loaded == config_manager.DEFAULT_CONFIG
 
+
+
+def test_load_config_oserror(monkeypatch):
+    def raise_os_error(*args, **kwargs):
+        raise OSError
+
+    monkeypatch.setattr('builtins.open', raise_os_error)
+    result = config_manager.load_config('dummy.json')
+    assert result == config_manager.DEFAULT_CONFIG
+
+
+def test_save_config_failure(monkeypatch, tmp_path):
+    def raise_os_error(*args, **kwargs):
+        raise OSError
+
+    monkeypatch.setattr('builtins.open', raise_os_error)
+    success = config_manager.save_config({}, str(tmp_path / 'out.json'))
+    assert success is False
 
 def test_default_path(tmp_path, monkeypatch):
     data = {"foo": "bar"}
@@ -38,3 +55,4 @@ def test_default_path(tmp_path, monkeypatch):
 
     loaded = config_manager.load_config()
     assert loaded == data
+

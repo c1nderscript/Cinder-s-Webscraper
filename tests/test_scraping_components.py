@@ -1,10 +1,23 @@
+
+
 from unittest.mock import patch
 import json
+
 
 from src.scraping.scraper_engine import ScraperEngine
 from src.scraping.content_extractor import ContentExtractor
 from src.scraping.output_manager import OutputManager
 
+
+
+def test_scraper_engine_scrape():
+    engine = ScraperEngine()
+    assert engine.scrape("https://example.com") is None
+
+
+def test_content_extractor_extract():
+    extractor = ContentExtractor()
+    assert extractor.extract("<html></html>") is None
 
 class DummyResponse:
     def __init__(self, text: str, status: int = 200):
@@ -42,8 +55,12 @@ def test_extractor_selector():
     assert result == ["A", "B"]
 
 
+
 def test_output_manager_save(tmp_path):
     manager = OutputManager()
+
+    assert manager.save({}, str(tmp_path / "out.json")) is None
+
     path = tmp_path / "out.txt"
     assert manager.save("hello", str(path)) is True
     assert path.read_text(encoding="utf-8") == "hello"
@@ -51,3 +68,4 @@ def test_output_manager_save(tmp_path):
     data = {"a": 1}
     assert manager.save(data, str(json_path)) is True
     assert json.loads(json_path.read_text(encoding="utf-8")) == data
+
