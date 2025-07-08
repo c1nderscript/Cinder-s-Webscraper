@@ -1,3 +1,5 @@
+"""Command-line entry point for running scheduled jobs."""
+
 import time
 
 from src.scheduling.schedule_manager import ScheduleManager

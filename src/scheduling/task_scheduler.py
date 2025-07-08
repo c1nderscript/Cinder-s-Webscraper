@@ -1,3 +1,5 @@
+"""Provides a basic scheduler for executing queued callables."""
+
 class TaskScheduler:
     """Simple in-memory task scheduler."""
 
