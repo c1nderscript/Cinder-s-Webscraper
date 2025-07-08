@@ -4,19 +4,23 @@
 
 A GUI-based web scraper application for Windows systems built with Python. The application enables users to configure, schedule, and manage web scraping tasks through an intuitive Tkinter interface. This project focuses on user-friendly web scraping with robust scheduling capabilities and flexible data output options.
 
-**Current Development Phase**: Early development with basic scheduling functionality implemented  
-**Primary Goal**: Create a comprehensive desktop application for non-technical users to perform web scraping tasks  
-**Target Platform**: Windows 10/11 with Python 3.8+ support  
+**Current Development Phase**: Early development with basic scheduling functionality implemented
+
+**Primary Goal**: Create a comprehensive desktop application for non-technical users to perform web scraping tasks
+
+**Target Platform**: Windows 10/11 with Python 3.8+ support
 
 ## Core Features
 
 ### 1. Website Management
+
 - **Add/Remove Websites**: Users can add URLs they want to scrape
 - **Website Profiles**: Save scraping configurations for different sites
 - **URL Validation**: Ensure valid URLs before adding to scrape list
 - **Site Categories**: Organize websites by category or purpose
 
 ### 2. Scraping Configuration
+
 - **Content Selectors**: CSS selectors or XPath for specific elements
 - **Data Extraction Rules**: Define what data to extract (text, images, links, etc.)
 - **Output Formats**: Support for CSV, JSON, XML, and plain text
@@ -24,18 +28,21 @@ A GUI-based web scraper application for Windows systems built with Python. The a
 - **Request Delays**: Configurable delays between requests
 
 ### 3. Scheduling System
+
 - **Timer-based Scraping**: Regular intervals (minutes, hours, days)
 - **Cron-like Scheduling**: Specific times and dates
 - **One-time Scraping**: Immediate execution option
 - **Schedule Management**: View, edit, and delete scheduled tasks
 
 ### 4. File Management
+
 - **Custom Save Paths**: User-specified output directories
 - **File Naming Conventions**: Timestamp-based or custom naming
 - **File Organization**: Automatic folder structure creation
 - **Backup System**: Keep previous scraping results
 
 ### 5. GUI Components
+
 - **Main Dashboard**: Overview of all scraping tasks
 - **Website Manager**: Add/edit/remove websites
 - **Scheduler Interface**: Configure timing and frequency
@@ -72,7 +79,7 @@ A GUI-based web scraper application for Windows systems built with Python. The a
 
 ```
 cinder-webscraper/
-├── src/
+├── cinder_web_scraper/
 │   ├── gui/                    # Tkinter GUI components
 │   │   ├── main_window.py      # Main application window
 │   │   ├── website_manager.py  # Website configuration interface
@@ -303,7 +310,7 @@ class ScrapingComponent:
 #### Configuration Management
 ```python
 """Example configuration usage."""
-from src.utils.config_manager import load_config, save_config
+from cinder_web_scraper.utils.config_manager import load_config, save_config
 from typing import Dict, Any
 
 def get_scraping_config() -> Dict[str, Any]:
@@ -413,7 +420,7 @@ def get_scraping_config() -> Dict[str, Any]:
 """Example test structure."""
 import pytest
 from unittest.mock import Mock, patch, MagicMock
-from src.module.component import Component
+from cinder_web_scraper.module.component import Component
 
 class TestComponent:
     """Test suite for Component class."""
@@ -428,7 +435,7 @@ class TestComponent:
         result = self.component.method()
         assert result == expected_result
     
-    @patch('src.module.component.requests.get')
+    @patch('cinder_web_scraper.module.component.requests.get')
     def test_with_mock(self, mock_get):
         """Test with mocked external dependencies."""
         mock_response = MagicMock()

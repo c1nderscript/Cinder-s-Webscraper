@@ -1,4 +1,4 @@
-from src.utils import config_manager
+from cinder_web_scraper.utils import config_manager
 
 
 def test_save_and_load(tmp_path):

@@ -1,4 +1,3 @@
-
 """Convenience imports for GUI components."""
 
 from .main_window import MainWindow
