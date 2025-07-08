@@ -5,54 +5,103 @@
 
 ## Project Overview
 
-A GUI-based web scraper application for Windows systems built with Python. The application enables users to configure, schedule, and manage web scraping tasks through an intuitive interface. Configuration files are stored in JSON format.
+Cinder's Web Scraper is a Windows-focused GUI application that helps you configure and schedule web scraping tasks without writing code. Configuration is stored in easy-to-edit JSON files and the application manages recurring jobs using the [`schedule`](https://pypi.org/project/schedule/) library.
 
-This repository contains a minimal scheduling example using the [`schedule`](https://pypi.org/project/schedule/) package.
+## Features
+
+- **Website Management** – add or remove URLs and keep per-site settings
+- **Scraping Rules** – define selectors and extraction rules for each website
+- **Scheduling** – run scrapes at fixed intervals using a simple scheduler
+- **File Management** – save scraped data to custom output folders
+- **Logging** – record scraper activity and errors to `data/logs/scraper.log`
+
+This repository currently contains a minimal scheduling example, but the directory structure prepares for a full desktop application.
 
 ## Installation
 
-- Requires **Python 3.8+**
-- Install dependencies:
+1. Install **Python 3.8+**
+2. Install the project dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
+## Directory Layout
+
+```
+project_root/
+├── data/      # Configuration files and logs
+│   ├── websites.json
+│   ├── schedules.db
+│   └── logs/
+├── output/    # Scraped data is written here
+└── src/       # Application code
+```
+
+`data/` holds user configuration and log files while all scraped results are written to `output/`.
+
 ## Configuration Helpers
 
-The `config_manager` module offers two helper functions:
-
-- `load_config(path)` – Load a configuration from a file. If the file does not exist or contains invalid JSON, a default configuration is returned.
-- `save_config(data, path)` – Save a configuration dictionary to the specified path.
-
-Example usage:
+The `config_manager` module in `src/utils` provides convenience functions:
 
 ```python
 from src.utils.config_manager import load_config, save_config
 
-# Load configuration or get defaults
 config = load_config("data/config.json")
-
-# Modify configuration as needed
 config["settings"]["debug"] = True
-
-# Save the updated configuration
-save_success = save_config(config, "data/config.json")
+save_config(config, "data/config.json")
 ```
 
-## Usage
+Configuration files can be edited manually or through the planned GUI interface.
 
-Run the application with:
+## Running the Application
+
+### Command-line demo
+
+Run the scheduler demo with:
 
 ```bash
 python main.py
 ```
 
-This will start a simple scheduler that prints a message every few seconds.
+You will see a simple loop that executes a dummy job every few seconds.
+
+### GUI application
+
+The GUI components live in `src/gui`. During development you can launch the (placeholder) main window with:
+
+```bash
+python -m src.gui.main_window
+```
+
+As features are implemented, this will provide buttons to manage websites, scheduling options, and view logs.
+
+## Example Workflow
+
+1. Edit `data/websites.json` to add the sites you want to scrape.
+2. Run `python main.py` (or use the GUI) to start the scheduler.
+3. Scraped data appears in the `output/` directory following the configured format.
+
+## Logging Configuration
+
+Logging is configured to write to `data/logs/scraper.log` and to the console:
+
+```python
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.FileHandler("data/logs/scraper.log"),
+        logging.StreamHandler(),
+    ],
+)
+```
 
 ## Contributing
 
-Contributions are welcome! Guidelines will be provided soon.
+Contributions are welcome! Please run `pytest` before submitting a pull request.
 
 ## License
 
