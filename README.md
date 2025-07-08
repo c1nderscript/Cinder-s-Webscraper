@@ -12,10 +12,16 @@ This repository contains a minimal scheduling example using the [`schedule`](htt
 ## Installation
 
 - Requires **Python 3.8+**
-- Install dependencies:
+- Install the package and its dependencies:
 
 ```bash
-pip install -r requirements.txt
+pip install .
+```
+
+For development, include optional dependencies:
+
+```bash
+pip install .[dev]
 ```
 
 ## Configuration Helpers
@@ -57,3 +63,4 @@ Contributions are welcome! Guidelines will be provided soon.
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
