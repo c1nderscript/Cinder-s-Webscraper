@@ -4,6 +4,8 @@ import json
 import os
 from typing import Any, Dict
 
+from .logger import default_logger as logger
+
 # Default configuration used when loading fails or no file is found
 DEFAULT_CONFIG: Dict[str, Any] = {
     "websites": [],
@@ -18,14 +20,19 @@ def load_config(path: str) -> Dict[str, Any]:
     """
     try:
         with open(path, "r", encoding="utf-8") as fp:
-            return json.load(fp)
+            config = json.load(fp)
+        logger.log(f"Loaded configuration from {path}")
+        return config
     except FileNotFoundError:
+        logger.log(f"Configuration file not found: {path}")
         # Return a copy of the default configuration if the file is missing
         return DEFAULT_CONFIG.copy()
     except json.JSONDecodeError:
+        logger.log(f"Invalid JSON in configuration: {path}")
         # Invalid JSON content; ignore the file and return defaults
         return DEFAULT_CONFIG.copy()
-    except OSError:
+    except OSError as exc:
+        logger.log(f"Error reading configuration {path}: {exc}")
         # Any other file-related error also results in default config
         return DEFAULT_CONFIG.copy()
 
@@ -39,6 +46,8 @@ def save_config(data: Dict[str, Any], path: str) -> bool:
         os.makedirs(os.path.dirname(path) or '.', exist_ok=True)
         with open(path, "w", encoding="utf-8") as fp:
             json.dump(data, fp, indent=4)
+        logger.log(f"Saved configuration to {path}")
         return True
-    except OSError:
+    except OSError as exc:
+        logger.log(f"Failed to save configuration to {path}: {exc}")
         return False

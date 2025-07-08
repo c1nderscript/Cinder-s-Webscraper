@@ -1,5 +1,6 @@
 """Extract content from scraped pages."""
 
+from src.utils.logger import default_logger as logger
 
 class ContentExtractor:
     """Placeholder for content extraction logic."""
@@ -13,4 +14,5 @@ class ContentExtractor:
         Returns:
             None: This method does not return anything.
         """
-        pass
+        logger.log("Extracting content from HTML")
+        # Actual extraction logic would go here

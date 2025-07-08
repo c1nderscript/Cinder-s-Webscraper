@@ -3,12 +3,13 @@
 import time
 
 from src.scheduling.schedule_manager import ScheduleManager
+from src.utils.logger import default_logger as logger
 
 
 def dummy_job() -> None:
     """Example job that prints a message."""
 
-    print("Dummy job executed")
+    logger.log("Dummy job executed")
 
 
 def main() -> None:
@@ -17,13 +18,13 @@ def main() -> None:
     manager = ScheduleManager()
     manager.add_task("dummy", dummy_job, 5)
 
-    print("Scheduler started. Press Ctrl+C to exit.")
+    logger.log("Scheduler started. Press Ctrl+C to exit.")
     try:
         while True:
             manager.run_pending()
             time.sleep(1)
     except KeyboardInterrupt:
-        print("\nScheduler stopped.")
+        logger.log("Scheduler stopped.")
 
 
 if __name__ == "__main__":

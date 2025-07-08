@@ -2,6 +2,8 @@
 
 from typing import Any
 
+from src.utils.logger import default_logger as logger
+
 
 class OutputManager:
     """Placeholder for output handling."""
@@ -16,4 +18,5 @@ class OutputManager:
         Returns:
             None: This method does not return anything.
         """
-        pass
+        logger.log(f"Saving data to {path}")
+        # Actual saving logic would go here

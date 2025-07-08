@@ -1,5 +1,6 @@
 """Core scraping engine."""
 
+from src.utils.logger import default_logger as logger
 
 class ScraperEngine:
     """Placeholder class for scraping logic."""
@@ -13,4 +14,5 @@ class ScraperEngine:
         Returns:
             None: This method does not return anything.
         """
-        pass
+        logger.log(f"Scraping URL: {url}")
+        # Actual scraping logic would go here
