@@ -1,3 +1,5 @@
+"""High-level interface for managing recurring tasks."""
+
 import schedule
 from typing import Callable, Dict
 

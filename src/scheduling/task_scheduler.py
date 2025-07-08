@@ -1,3 +1,5 @@
+"""Provides a basic scheduler for executing queued callables."""
+
 from typing import Any, Callable, Dict, List, Tuple
 
 
