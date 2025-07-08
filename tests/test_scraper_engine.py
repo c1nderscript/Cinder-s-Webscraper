@@ -17,3 +17,10 @@ def test_scraper_engine_scrape_returns_none_for_invalid_url():
     result = engine.scrape('http://invalid-url-that-does-not-exist-12345.com')
     # Should return None for invalid URLs
     assert result is None
+
+
+def test_scraper_engine_scrape_working_url():
+    engine = ScraperEngine()
+    content = engine.scrape('http://example.com')
+    assert '<html>' in content 
+    assert '<title>Example Domain</title>' in content
