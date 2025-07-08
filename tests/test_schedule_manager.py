@@ -1,5 +1,5 @@
 import schedule
-from src.scheduling.schedule_manager import ScheduleManager
+from cinder_web_scraper.scheduling.schedule_manager import ScheduleManager
 from tests.dummy_module import dummy_task
 
 
@@ -16,9 +16,7 @@ def test_add_task(tmp_path):
     assert manager.list_tasks()["task1"] is job
 
     assert manager.get_schedule("task1") == {"name": "task1", "interval": 1}
-=======
     manager.close()
-
 
 
 def test_remove_task(tmp_path):
@@ -31,27 +29,18 @@ def test_remove_task(tmp_path):
     assert manager.list_tasks() == {}
 
     assert manager.get_schedule("task1") is None
-
-
-def test_list_tasks_multiple(tmp_path):
-    schedule.clear()
-
     manager.close()
-
 
 
 def test_remove_task_missing():
     schedule.clear()
     manager = ScheduleManager()
     assert manager.remove_task("missing") is False
+    manager.close()
 
-
-def test_list_tasks_multiple():
 
 def test_list_tasks_multiple(tmp_path):
-
     schedule.clear()
-
     db = tmp_path / "sched.db"
     manager = ScheduleManager(db_path=str(db))
     job1 = manager.add_task("task1", dummy, 1)
@@ -60,6 +49,7 @@ def test_list_tasks_multiple(tmp_path):
     assert set(tasks.keys()) == {"task1", "task2"}
     assert tasks["task1"] is job1
     assert tasks["task2"] is job2
+    manager.close()
 
 
 

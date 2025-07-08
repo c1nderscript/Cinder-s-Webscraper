@@ -1,4 +1,4 @@
-from src.scheduling.task_scheduler import TaskScheduler
+from cinder_web_scraper.scheduling.task_scheduler import TaskScheduler
 
 
 def test_add_and_run():

@@ -85,7 +85,7 @@ The `config_manager` module offers two helper functions:
 Example usage:
 
 ```python
-from src.utils.config_manager import load_config, save_config
+from cinder_web_scraper.utils.config_manager import load_config, save_config
 
 # Load configuration or get defaults
 config = load_config()

@@ -72,7 +72,7 @@ A GUI-based web scraper application for Windows systems built with Python. The a
 
 ```
 cinder-webscraper/
-├── src/
+├── cinder_web_scraper/
 │   ├── gui/                    # Tkinter GUI components
 │   │   ├── main_window.py      # Main application window
 │   │   ├── website_manager.py  # Website configuration interface
@@ -303,7 +303,7 @@ class ScrapingComponent:
 #### Configuration Management
 ```python
 """Example configuration usage."""
-from src.utils.config_manager import load_config, save_config
+from cinder_web_scraper.utils.config_manager import load_config, save_config
 from typing import Dict, Any
 
 def get_scraping_config() -> Dict[str, Any]:
@@ -413,7 +413,7 @@ def get_scraping_config() -> Dict[str, Any]:
 """Example test structure."""
 import pytest
 from unittest.mock import Mock, patch, MagicMock
-from src.module.component import Component
+from cinder_web_scraper.module.component import Component
 
 class TestComponent:
     """Test suite for Component class."""
@@ -428,7 +428,7 @@ class TestComponent:
         result = self.component.method()
         assert result == expected_result
     
-    @patch('src.module.component.requests.get')
+    @patch('cinder_web_scraper.module.component.requests.get')
     def test_with_mock(self, mock_get):
         """Test with mocked external dependencies."""
         mock_response = MagicMock()
