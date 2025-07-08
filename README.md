@@ -11,12 +11,40 @@ This repository contains a minimal scheduling example using the [`schedule`](htt
 
 ## Installation
 
-- Requires **Python 3.8+**
-- Install dependencies:
+Follow these steps to get a local development environment running on
+Windows 10/11. The instructions also work on other platforms with a
+compatible Python interpreter.
 
-```bash
-pip install -r requirements.txt
-```
+1. Install **Python 3.8** or later and make sure ``python`` is available in
+   your ``PATH``.
+2. Clone this repository:
+
+   ```bash
+   git clone https://github.com/your-user/cinder-webscraper.git
+   cd cinder-webscraper
+   ```
+
+3. (Optional) Create and activate a virtual environment:
+
+   ```bash
+   python -m venv venv
+   # Windows
+   venv\Scripts\activate
+   # Linux/macOS
+   source venv/bin/activate
+   ```
+
+4. Install the dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+5. Run the test suite to verify your setup:
+
+   ```bash
+   pytest
+   ```
 
 ## Configuration Helpers
 
@@ -42,17 +70,63 @@ save_success = save_config(config, "data/config.json")
 
 ## Usage
 
-Run the application with:
+### Command-line
+
+The repository currently ships with a small command-line demo. Execute
 
 ```bash
 python main.py
 ```
 
-This will start a simple scheduler that prints a message every few seconds.
+and a job named ``dummy`` will run every five seconds until you press
+``Ctrl+C``.
+
+### Graphical interface
+
+A basic Tkinter interface is included but is still under development. You
+can experiment with the placeholder window using the following snippet:
+
+```bash
+python - <<'PY'
+from src.gui.main_window import MainWindow
+
+window = MainWindow()
+window.show()
+PY
+```
+
+Future releases will bundle a launcher script that opens the GUI directly.
+
+## Troubleshooting
+
+If the application fails to start or tests do not run, try the following:
+
+1. **Verify Python version** – run ``python --version`` and ensure it is
+   3.8 or newer.
+2. **Dependencies** – reinstall packages with ``pip install -r requirements.txt``.
+3. **Virtual environment issues** – deactivate and recreate the virtual
+   environment if modules are missing.
+
+## FAQ
+
+**Q: Does the scraper work on macOS or Linux?**
+
+Yes. Although the project targets Windows, the code is pure Python and can run
+on other platforms with only minor adjustments.
+
+**Q: Where is scraped data stored?**
+
+By default, files are saved under the ``output/`` directory. You can change the
+path in your configuration file.
 
 ## Contributing
 
-Contributions are welcome! Guidelines will be provided soon.
+Please see the [Developer Guide](docs/DEVELOPER_GUIDE.md) for detailed
+contribution instructions. In short:
+
+1. Fork the repository and create a feature branch.
+2. Install dependencies and run ``pytest`` before submitting a pull request.
+3. Keep commits focused and provide clear descriptions of your changes.
 
 ## License
 
