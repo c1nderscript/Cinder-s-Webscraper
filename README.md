@@ -11,6 +11,19 @@ This repository contains a minimal scheduling example using the [`schedule`](htt
 
 ## Installation
 
+
+- Requires **Python 3.8+**
+- Install the package and its dependencies:
+
+```bash
+pip install .
+```
+
+For development, include optional dependencies:
+
+```bash
+pip install .[dev]
+
 Follow these steps to get a local development environment running on
 Windows 10/11. The instructions also work on other platforms with a
 compatible Python interpreter.
@@ -59,6 +72,7 @@ Configuration, schedules and log files are stored in the `data/` folder:
 ```bash
 mkdir -p data/logs
 touch data/websites.json data/schedules.db
+
 ```
 
 ## Configuration Helpers
@@ -146,3 +160,4 @@ contribution instructions. In short:
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
