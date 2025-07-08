@@ -19,6 +19,36 @@ logging.basicConfig(
 )
 
 
+class Logger:
+    """Logger class for application logging."""
+    
+    def __init__(self, name: str | None = None):
+        """Initialize logger with optional name.
+        
+        Args:
+            name: Name for the logger instance.
+        """
+        self.logger = logging.getLogger(name)
+    
+    def log(self, message: str, level: str = "info") -> None:
+        """Log a message at the specified level.
+        
+        Args:
+            message: The message to log.
+            level: The logging level (debug, info, warning, error, critical).
+        """
+        level_map = {
+            "debug": self.logger.debug,
+            "info": self.logger.info,
+            "warning": self.logger.warning,
+            "error": self.logger.error,
+            "critical": self.logger.critical,
+        }
+        
+        log_func = level_map.get(level.lower(), self.logger.info)
+        log_func(message)
+
+
 def get_logger(name: str | None = None) -> logging.Logger:
     """Return a configured logger instance."""
 
@@ -36,4 +66,3 @@ def log_exception(logger: logging.Logger, message: str, exc: Exception) -> None:
 
     logger.error(message)
     logger.exception(exc)
-
