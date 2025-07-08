@@ -2,7 +2,12 @@
 
 
 class SchedulerDialog:
-    """Placeholder for scheduling dialog."""
+    """UI dialog for configuring scraping schedules."""
 
-    def open(self):
+    def open(self) -> None:
+        """Open the scheduler dialog window.
+
+        Returns:
+            None: This method does not return anything.
+        """
         pass

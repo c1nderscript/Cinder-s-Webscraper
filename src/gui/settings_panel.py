@@ -2,7 +2,12 @@
 
 
 class SettingsPanel:
-    """Placeholder for settings panel."""
+    """Placeholder for the settings panel UI."""
 
-    def open(self):
+    def open(self) -> None:
+        """Open the settings panel window.
+
+        Returns:
+            None: This method does not return anything.
+        """
         pass
