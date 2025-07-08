@@ -7,6 +7,8 @@
 
 A GUI-based web scraper application for Windows systems built with Python. The application enables users to configure, schedule, and manage web scraping tasks through an intuitive interface. Configuration files are stored in JSON format.
 
+This repository contains a minimal scheduling example using the [`schedule`](https://pypi.org/project/schedule/) package.
+
 ## Installation
 
 - Requires **Python 3.8+**
@@ -45,6 +47,8 @@ Run the application with:
 ```bash
 python main.py
 ```
+
+This will start a simple scheduler that prints a message every few seconds.
 
 ## Contributing
 
