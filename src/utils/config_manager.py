@@ -5,10 +5,8 @@ import os
 from typing import Any, Dict
 
 # Default configuration used when loading fails or no file is found
-DEFAULT_CONFIG: Dict[str, Any] = {
-    "websites": [],
-    "settings": {}
-}
+DEFAULT_CONFIG: Dict[str, Any] = {"websites": [], "settings": {}}
+
 
 def load_config(path: str) -> Dict[str, Any]:
     """Load configuration from ``path`` in JSON format.
@@ -29,6 +27,7 @@ def load_config(path: str) -> Dict[str, Any]:
         # Any other file-related error also results in default config
         return DEFAULT_CONFIG.copy()
 
+
 def save_config(data: Dict[str, Any], path: str) -> bool:
     """Save ``data`` as JSON to ``path``.
 
@@ -36,7 +35,7 @@ def save_config(data: Dict[str, Any], path: str) -> bool:
     configuration was saved successfully, otherwise ``False``.
     """
     try:
-        os.makedirs(os.path.dirname(path) or '.', exist_ok=True)
+        os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
         with open(path, "w", encoding="utf-8") as fp:
             json.dump(data, fp, indent=4)
         return True
