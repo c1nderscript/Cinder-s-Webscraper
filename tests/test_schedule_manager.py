@@ -23,6 +23,12 @@ def test_remove_task():
     assert manager.list_tasks() == {}
 
 
+def test_remove_task_missing():
+    schedule.clear()
+    manager = ScheduleManager()
+    assert manager.remove_task("missing") is False
+
+
 def test_list_tasks_multiple():
     schedule.clear()
     manager = ScheduleManager()
@@ -32,3 +38,17 @@ def test_list_tasks_multiple():
     assert set(tasks.keys()) == {"task1", "task2"}
     assert tasks["task1"] is job1
     assert tasks["task2"] is job2
+
+
+def test_run_pending(monkeypatch):
+    schedule.clear()
+    manager = ScheduleManager()
+
+    called = []
+
+    def fake_run_pending():
+        called.append(True)
+
+    monkeypatch.setattr(schedule, "run_pending", fake_run_pending)
+    manager.run_pending()
+    assert called == [True]
