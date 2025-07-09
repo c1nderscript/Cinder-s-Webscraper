@@ -1,7 +1,5 @@
 [build-system]
-
 requires = ["setuptools>=68", "wheel"]
-
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -22,5 +20,6 @@ cinder-web-scraper = "cinder_web_scraper.__main__:main"
 dev = [
     "pytest==8.4.0",
 ]
+
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["."]
