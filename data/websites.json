@@ -1,7 +1,11 @@
-
-[]
-
-{
-    "foo": "bar"
-}
-
+[
+    {
+        "name": "Example Site",
+        "url": "https://example.com",
+        "selectors": {
+            "title": "h1",
+            "content": ".content"
+        },
+        "interval": 3600
+    }
+]
