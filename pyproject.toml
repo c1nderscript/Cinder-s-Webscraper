@@ -11,6 +11,8 @@ readme = "README.md"
 requires-python = ">=3.8"
 dependencies = [
     "schedule==1.2.2",
+    "requests",
+    "beautifulsoup4",
 ]
 
 [project.scripts]
@@ -21,5 +23,4 @@ dev = [
     "pytest==8.4.0",
 ]
 
-[tool.setuptools.packages.find]
-where = ["."]
+[tool.setuptools.packages.find]where = ["."]
