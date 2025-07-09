@@ -5,11 +5,27 @@
 
 ## Project Overview
 
+
+Cinder's Web Scraper is a Windows-focused GUI application that helps you configure and schedule web scraping tasks without writing code. Configuration is stored in easy-to-edit JSON files and the application manages recurring jobs using the [`schedule`](https://pypi.org/project/schedule/) library.
+
 A GUI-based web scraper application for Windows systems built with Python. The application enables users to configure, schedule, and manage web scraping tasks through an intuitive interface. Configuration files are stored in JSON format and saved under the `data/` directory.
 
-This repository contains a minimal scheduling example using the [`schedule`](https://pypi.org/project/schedule/) package.
+
+## Features
+
+- **Website Management** – add or remove URLs and keep per-site settings
+- **Scraping Rules** – define selectors and extraction rules for each website
+- **Scheduling** – run scrapes at fixed intervals using a simple scheduler
+- **File Management** – save scraped data to custom output folders
+- **Logging** – record scraper activity and errors to `data/logs/scraper.log`
+
+This repository currently contains a minimal scheduling example, but the directory structure prepares for a full desktop application.
 
 ## Installation
+
+
+1. Install **Python 3.8+**
+2. Install the project dependencies:
 
 
 - Requires **Python 3.8+**
@@ -69,23 +85,43 @@ Configuration, schedules and log files are stored in the `data/` folder:
 
 - Create the required data directories and files:
 
+
 ```bash
 mkdir -p data/logs
 touch data/websites.json data/schedules.db
 
 ```
 
-## Configuration Helpers
+## Directory Layout
 
-The `config_manager` module offers two helper functions:
+```
+project_root/
+├── data/      # Configuration files and logs
+│   ├── websites.json
+│   ├── schedules.db
+│   └── logs/
+├── output/    # Scraped data is written here
+└── src/       # Application code
+```
+
+`data/` holds user configuration and log files while all scraped results are written to `output/`.
+
+
+## Configuration Helpers
 
 - `load_config(path=None)` – Load a configuration from a file. If ``path`` is omitted or the file does not exist, a default configuration is returned.
 - `save_config(data, path=None)` – Save a configuration dictionary to ``path``. When ``path`` is omitted the data is written to `data/websites.json`.
 
-Example usage:
+
+The `config_manager` module in `src/utils` provides convenience functions:
 
 ```python
 from cinder_web_scraper.utils.config_manager import load_config, save_config
+
+
+config = load_config("data/config.json")
+config["settings"]["debug"] = True
+save_config(config, "data/config.json")
 
 # Load configuration or get defaults
 config = load_config()
@@ -95,17 +131,66 @@ config["settings"]["debug"] = True
 
 # Save the updated configuration
 save_success = save_config(config)
+
 ```
 
-## Usage
+Configuration files can be edited manually or through the planned GUI interface.
+
+
+## Running the Application
+
+### Command-line demo
+
+Run the scheduler demo with:
 
 ### Command-line
 
 The repository currently ships with a small command-line demo. Execute
 
+
 ```bash
 python main.py
 ```
+
+
+You will see a simple loop that executes a dummy job every few seconds.
+
+### GUI application
+
+The GUI components live in `src/gui`. During development you can launch the (placeholder) main window with:
+
+```bash
+python -m src.gui.main_window
+```
+
+As features are implemented, this will provide buttons to manage websites, scheduling options, and view logs.
+
+## Example Workflow
+
+1. Edit `data/websites.json` to add the sites you want to scrape.
+2. Run `python main.py` (or use the GUI) to start the scheduler.
+3. Scraped data appears in the `output/` directory following the configured format.
+
+## Logging Configuration
+
+Logging is configured to write to `data/logs/scraper.log` and to the console:
+
+```python
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.FileHandler("data/logs/scraper.log"),
+        logging.StreamHandler(),
+    ],
+)
+```
+
+## Contributing
+
+Contributions are welcome! Please run `pytest` before submitting a pull request.
 
 and a job named ``dummy`` will run every five seconds until you press
 ``Ctrl+C``.
@@ -185,6 +270,7 @@ contribution instructions. In short:
 1. Fork the repository and create a feature branch.
 2. Install dependencies and run ``pytest`` before submitting a pull request.
 3. Keep commits focused and provide clear descriptions of your changes.
+
 
 ## License
 
