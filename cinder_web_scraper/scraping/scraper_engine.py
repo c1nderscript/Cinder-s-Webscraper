@@ -14,7 +14,7 @@ from bs4 import BeautifulSoup
 from .content_extractor import ContentExtractor
 from .output_manager import OutputManager
 
-from src.utils.logger import default_logger as logger
+from cinder_web_scraper.utils.logger import default_logger as logger
 
 class ScraperEngine:
     """Download pages and extract data using provided helpers with retry support."""

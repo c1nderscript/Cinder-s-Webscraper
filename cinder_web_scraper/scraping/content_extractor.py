@@ -6,31 +6,25 @@ from typing import Any, Dict, List, Optional
 
 from bs4 import BeautifulSoup
 
-from src.utils.logger import default_logger as logger
+from cinder_web_scraper.utils.logger import default_logger as logger
 
 class ContentExtractor:
     """Parse HTML and return structured data or text from selected elements."""
 
-    def extract(self, html: str, selector: Optional[str] = None) -> List[str]:
+    def extract(self, html: str, selector: Optional[str] = None) -> Any:
         """Extract information from ``html``.
 
-        This method parses ``html`` using ``BeautifulSoup`` and returns a
-        list of text strings from the specified selector or the entire page.
-
-        Args:
-            html: Raw HTML string to parse.
-            selector: Optional CSS selector. When provided, text from matching
-                elements is returned; otherwise the entire page text is
-                returned.
-
-        Returns:
-            A list of text strings extracted from the HTML.
+        When ``selector`` is provided, a list of text strings from the selected
+        elements is returned. Otherwise a structured dictionary containing the
+        page title, links, images and text is produced.
         """
         soup = BeautifulSoup(html, "html.parser")
+
         if selector:
             elements = soup.select(selector)
             return [element.get_text(strip=True) for element in elements]
-        return [soup.get_text(strip=True)]
+
+        return self.extract_structured(html)
 
     def extract_structured(self, html: str) -> Dict[str, Any]:
         """Extract structured information from HTML content.

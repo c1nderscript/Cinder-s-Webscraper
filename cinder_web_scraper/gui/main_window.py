@@ -6,7 +6,7 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 from typing import Callable, Optional
 
-from src.utils.logger import get_logger, log_exception
+from cinder_web_scraper.utils.logger import get_logger, log_exception
 
 logger = get_logger(__name__)
 
@@ -16,7 +16,7 @@ class MainWindow:
 
     def __init__(
         self,
-        root: tk.Tk,
+        root: tk.Tk | None = None,
         on_manage_sites: Optional[Callable[[], None]] = None,
         on_schedule: Optional[Callable[[], None]] = None,
         on_settings: Optional[Callable[[], None]] = None,
@@ -29,7 +29,7 @@ class MainWindow:
             on_schedule: Callback for opening the scheduler.
             on_settings: Callback for opening the settings panel.
         """
-        self.root = root
+        self.root = root or tk.Tk()
         self.on_manage_sites = on_manage_sites
         self.on_schedule = on_schedule
         self.on_settings = on_settings

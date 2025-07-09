@@ -1,24 +1,14 @@
 """High-level interface for managing recurring tasks with persistence."""
+from __future__ import annotations
 
+import importlib
 import os
 import sqlite3
 from typing import Callable, Dict, List, Optional
 
 import schedule
 
-
-from __future__ import annotations
-
-import importlib
-import os
-import sqlite3
-from typing import Callable, Dict
-
-from src.utils.logger import default_logger as logger
-
-
-import schedule
-
+from cinder_web_scraper.utils.logger import default_logger as logger
 
 class ScheduleManager:
 
@@ -114,7 +104,6 @@ class ScheduleManager:
             schedule.cancel_job(job)
             self.delete_schedule(name)
 
-    """Manage scheduled jobs using the schedule package and SQLite."""
 
     def __init__(self, db_path: str = "data/schedules.db") -> None:
         """Initialize the manager and load tasks from ``db_path``.
@@ -124,7 +113,12 @@ class ScheduleManager:
         self.db_path = db_path
         os.makedirs(os.path.dirname(self.db_path) or ".", exist_ok=True)
 
-        self._conn = sqlite3.connect(self.db_path)
+        self.conn = sqlite3.connect(self.db_path)
+        self.conn.row_factory = sqlite3.Row
+        self.conn.execute(
+            "CREATE TABLE IF NOT EXISTS schedules (name TEXT PRIMARY KEY, interval INTEGER)"
+        )
+        self.conn.commit()
         self._init_db()
 
         self.jobs: Dict[str, schedule.Job] = {}
@@ -134,10 +128,10 @@ class ScheduleManager:
     # database handling
     # ------------------------------------------------------------------
 
-    def _init_db(self) -e None:
+    def _init_db(self) -> None:
         """Create the tasks table if it doesn't exist."""
-        with self._conn:
-            self._conn.execute(
+        with self.conn:
+            self.conn.execute(
                 """
                 CREATE TABLE IF NOT EXISTS tasks (
                     name TEXT PRIMARY KEY,
@@ -148,9 +142,9 @@ class ScheduleManager:
                 """
             )
 
-    def _load_tasks(self) -e None:
+    def _load_tasks(self) -> None:
         """Load all tasks from the database and schedule them."""
-        cursor = self._conn.execute(
+        cursor = self.conn.execute(
             "SELECT name, module, func_name, interval FROM tasks"
         )
         for name, module, func_name, interval in cursor.fetchall():
@@ -163,51 +157,50 @@ class ScheduleManager:
             job = schedule.every(interval).seconds.do(func)
             self.jobs[name] = job
 
-    def _persist_task(self, name: str, func: Callable, interval: int) -e None:
+    def _persist_task(self, name: str, func: Callable, interval: int) -> None:
         """Persist a task definition to the database."""
-        with self._conn:
-            self._conn.execute(
+        with self.conn:
+            self.conn.execute(
                 "INSERT OR REPLACE INTO tasks (name, module, func_name, interval)"
                 " VALUES (?, ?, ?, ?)",
                 (name, func.__module__, func.__name__, interval),
             )
 
-    def _delete_task(self, name: str) -e None:
+    def _delete_task(self, name: str) -> None:
         """Remove a task from the database."""
-        with self._conn:
-            self._conn.execute("DELETE FROM tasks WHERE name = ?", (name,))
+        with self.conn:
+            self.conn.execute("DELETE FROM tasks WHERE name = ?", (name,))
 
-    def add_task(self, name: str, func: Callable, interval: int) -e schedule.Job:
+    def add_task(self, name: str, func: Callable, interval: int) -> schedule.Job:
         """Add a job that runs every ``interval`` seconds and persist it."""
         job = schedule.every(interval).seconds.do(func)
         self.jobs[name] = job
         self._persist_task(name, func, interval)
+        self.create_schedule(name, interval)
         return job
 
-    def remove_task(self, name: str) -e bool:
+    def remove_task(self, name: str) -> bool:
         """Remove a scheduled job by name."""
         job = self.jobs.pop(name, None)
         if job:
             schedule.cancel_job(job)
             logger.log(f"Removed task '{name}'")
-
             self._delete_task(name)
-
-
+            self.delete_schedule(name)
             return True
         logger.log(f"Attempted to remove unknown task '{name}'")
         return False
 
-    def list_tasks(self) -e Dict[str, schedule.Job]:
+    def list_tasks(self) -> Dict[str, schedule.Job]:
         """Return a mapping of task names to jobs."""
         logger.log("Listing scheduled tasks")
         return dict(self.jobs)
 
-    def run_pending(self) -e None:
+    def run_pending(self) -> None:
         """Run all jobs that are scheduled to run."""
         logger.log("Running pending scheduled tasks")
         schedule.run_pending()
 
-    def close(self) -e None:
+    def close(self) -> None:
         """Close the underlying SQLite connection."""
-        self._conn.close()
+        self.conn.close()

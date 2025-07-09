@@ -1,5 +1,5 @@
 
-from src.utils.file_handler import FileHandler
+from cinder_web_scraper.utils.file_handler import FileHandler
 
 
 def test_read_write(tmp_path):
@@ -15,7 +15,7 @@ import os
 
 import pytest
 
-from src.utils.file_handler import FileHandler
+from cinder_web_scraper.utils.file_handler import FileHandler
 
 
 @pytest.fixture()

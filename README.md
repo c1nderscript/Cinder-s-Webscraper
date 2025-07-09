@@ -202,7 +202,7 @@ can experiment with the placeholder window using the following snippet:
 
 ```bash
 python - <<'PY'
-from src.gui.main_window import MainWindow
+from cinder_web_scraper.gui.main_window import MainWindow
 
 window = MainWindow()
 window.show()
