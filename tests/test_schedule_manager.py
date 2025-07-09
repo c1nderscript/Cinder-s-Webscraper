@@ -1,5 +1,5 @@
 import schedule
-from cinder_web_scraper.scheduling.schedule_manager import ScheduleManager
+from cinder_web_scraper.scheduling import ScheduleManager
 from tests.dummy_module import dummy_task
 
 

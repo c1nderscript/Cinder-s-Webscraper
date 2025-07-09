@@ -2,7 +2,7 @@
 
 import time
 
-from src.scheduling.schedule_manager import ScheduleManager
+from cinder_web_scraper.scheduling import ScheduleManager
 
 
 def dummy_job() -> None:

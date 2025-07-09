@@ -1,5 +1,5 @@
 import schedule
-from src.scheduling.schedule_manager import ScheduleManager
+from cinder_web_scraper.scheduling import ScheduleManager
 
 
 def test_run_pending_calls_schedule(monkeypatch):

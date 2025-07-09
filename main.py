@@ -5,7 +5,7 @@ from __future__ import annotations
 import time
 import traceback
 
-from cinder_web_scraper.scheduling.schedule_manager import ScheduleManager
+from cinder_web_scraper.scheduling import ScheduleManager
 from cinder_web_scraper.utils.logger import default_logger as logger
 from cinder_web_scraper.utils.logger import get_logger
 
