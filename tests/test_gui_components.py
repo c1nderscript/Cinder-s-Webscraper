@@ -1,7 +1,7 @@
-from src.gui.main_window import MainWindow
-from src.gui.scheduler_dialog import SchedulerDialog
-from src.gui.settings_panel import SettingsPanel
-from src.gui.website_manager import WebsiteManager
+from cinder_web_scraper.gui.main_window import MainWindow
+from cinder_web_scraper.gui.scheduler_dialog import SchedulerDialog
+from cinder_web_scraper.gui.settings_panel import SettingsPanel
+from cinder_web_scraper.gui.website_manager import WebsiteManager
 
 
 def test_main_window_show():

@@ -1,6 +1,6 @@
 import builtins
-from src.utils.file_handler import FileHandler
-from src.utils.logger import get_logger
+from cinder_web_scraper.utils.file_handler import FileHandler
+from cinder_web_scraper.utils.logger import get_logger
 
 
 def test_file_handler_methods_return_none(tmp_path):
