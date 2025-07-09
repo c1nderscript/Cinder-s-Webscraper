@@ -1,21 +1,26 @@
-from src.gui.main_window import MainWindow
-from src.gui.scheduler_dialog import SchedulerDialog
-from src.gui.settings_panel import SettingsPanel
-from src.gui.website_manager import WebsiteManager
+from unittest.mock import patch, MagicMock
+from cinder_web_scraper.gui.main_window import MainWindow
+from cinder_web_scraper.gui.scheduler_dialog import SchedulerDialog
+from cinder_web_scraper.gui.settings_panel import SettingsPanel
+from cinder_web_scraper.gui.website_manager import WebsiteManager
 
 
-def test_main_window_show():
+@patch('cinder_web_scraper.gui.main_window.tk')
+def test_main_window_show(mock_tk):
+    mock_tk.Tk.return_value = MagicMock()
     window = MainWindow()
     assert window.show() is None
 
 
-def test_scheduler_dialog_open():
-    dlg = SchedulerDialog()
+@patch('cinder_web_scraper.gui.scheduler_dialog.tk')
+def test_scheduler_dialog_open(mock_tk):
+    dlg = SchedulerDialog(MagicMock())
     assert dlg.open() is None
 
 
-def test_settings_panel_open():
-    panel = SettingsPanel()
+@patch('cinder_web_scraper.gui.settings_panel.tk')
+def test_settings_panel_open(mock_tk):
+    panel = SettingsPanel(MagicMock())
     assert panel.open() is None
 
 
