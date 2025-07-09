@@ -7,15 +7,11 @@ import traceback
 
 from cinder_web_scraper.scheduling.schedule_manager import ScheduleManager
 from cinder_web_scraper.utils.logger import default_logger as logger
-from cinder_web_scraper.utils.logger import get_logger
 
 
 def dummy_job() -> None:
     """Example job that prints a message."""
     logger.log("Dummy job executed")
-
-
-logger = get_logger(__name__)
 
 
 def main() -> None:
