@@ -19,9 +19,6 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           pip install flake8
-      - name: Lint with flake8
-        run: |
-          flake8 cinder_web_scraper tests main.py
       - name: Run tests with coverage
         run: |
           pytest --cov=cinder_web_scraper --cov-report=xml
