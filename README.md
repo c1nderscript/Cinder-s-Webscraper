@@ -251,6 +251,27 @@ Configuration data is stored under the `data/` directory:
 - `data/websites.json` – Individual website profiles
 - `data/schedules.db` – Planned job database
 
+### Website profile schema
+
+Each entry in `data/websites.json` follows this structure:
+
+```json
+{
+  "websites": [
+    {
+      "name": "Example Site",
+      "url": "https://example.com",
+      "selectors": {
+        "title": "h1",
+        "content": ".content"
+      },
+      "interval": 3600
+    }
+  ],
+  "settings": {}
+}
+```
+
 These files are created automatically when saving via `config_manager` or scheduling utilities. Logs are written to `data/logs/`.
 
 ## Example Scraping Workflow
