@@ -1,5 +1,5 @@
 import pytest
-from src.scraping.content_extractor import ContentExtractor
+from cinder_web_scraper.scraping.content_extractor import ContentExtractor
 
 
 def test_basic_html():

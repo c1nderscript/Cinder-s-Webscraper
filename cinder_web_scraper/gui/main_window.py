@@ -6,7 +6,7 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 from typing import Callable, Optional
 
-from src.utils.logger import get_logger, log_exception
+from cinder_web_scraper.utils.logger import get_logger, log_exception
 
 logger = get_logger(__name__)
 
