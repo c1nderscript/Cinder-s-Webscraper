@@ -16,7 +16,7 @@ class MainWindow:
 
     def __init__(
         self,
-        root: tk.Tk,
+        root: tk.Tk | None = None,
         on_manage_sites: Optional[Callable[[], None]] = None,
         on_schedule: Optional[Callable[[], None]] = None,
         on_settings: Optional[Callable[[], None]] = None,
@@ -24,12 +24,13 @@ class MainWindow:
         """Initialize the main window instance.
 
         Args:
-            root: Tk root window.
+            root: Optional Tk root window. If ``None``, a new ``tk.Tk`` instance
+                is created.
             on_manage_sites: Callback for managing websites.
             on_schedule: Callback for opening the scheduler.
             on_settings: Callback for opening the settings panel.
         """
-        self.root = root
+        self.root = root or tk.Tk()
         self.on_manage_sites = on_manage_sites
         self.on_schedule = on_schedule
         self.on_settings = on_settings
