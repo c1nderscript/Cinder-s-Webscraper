@@ -96,12 +96,21 @@ touch data/websites.json data/schedules.db
 
 ```
 project_root/
+├── cinder_web_scraper/  # Application code
+│   ├── gui/
+│   ├── scraping/
+│   ├── scheduling/
+│   └── utils/
 ├── data/      # Configuration files and logs
 │   ├── websites.json
 │   ├── schedules.db
 │   └── logs/
 ├── output/    # Scraped data is written here
+
 └── cinder_web_scraper/       # Application code
+
+└── tests/
+
 ```
 
 `data/` holds user configuration and log files while all scraped results are written to `output/`.
@@ -113,7 +122,9 @@ project_root/
 - `save_config(data, path=None)` – Save a configuration dictionary to ``path``. When ``path`` is omitted the data is written to `data/websites.json`.
 
 
-The `config_manager` module in `cinder_web_scraper/utils` provides convenience functions:
+
+The `config_manager` module in `cinder_web_scraper.utils` provides convenience functions:
+
 
 ```python
 from cinder_web_scraper.utils.config_manager import load_config, save_config

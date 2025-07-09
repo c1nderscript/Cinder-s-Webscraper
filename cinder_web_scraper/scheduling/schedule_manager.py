@@ -1,3 +1,4 @@
+
 """High-level interface for managing recurring tasks with persistence."""
 from __future__ import annotations
 
@@ -8,130 +9,67 @@ from typing import Callable, Dict, List, Optional
 import schedule
 
 
+"""High-level interface for managing recurring tasks with SQLite persistence."""
+
+
 
 import importlib
+
 
 from cinder_web_scraper.utils.logger import default_logger as logger
 
 
 
+import os
+import sqlite3
+from typing import Callable, Dict, List, Optional
+
+import schedule
+
+from src.utils.logger import default_logger as logger
+
+
+
 class ScheduleManager:
-
-    """Manage scheduled jobs using the schedule package with SQLite persistence."""
-
-    def __init__(self, db_path: str = "data/schedules.db") -> None:
-        """Initialize the manager and ensure the SQLite table exists."""
-        self.jobs: Dict[str, schedule.Job] = {}
-        self.db_path = db_path
-        os.makedirs(os.path.dirname(db_path) or ".", exist_ok=True)
-        self.conn = sqlite3.connect(self.db_path)
-        self.conn.row_factory = sqlite3.Row
-        self.conn.execute(
-            "CREATE TABLE IF NOT EXISTS schedules (name TEXT PRIMARY KEY, interval INTEGER)"
-        )
-        self.conn.commit()
-
-    # ------------------------------------------------------------------
-    # SQLite CRUD operations
-    # ------------------------------------------------------------------
-
-    def create_schedule(self, name: str, interval: int) -> None:
-        """Insert a schedule record."""
-        with self.conn:
-            self.conn.execute(
-                "INSERT INTO schedules (name, interval) VALUES (?, ?)",
-                (name, interval),
-            )
-
-    def get_schedule(self, name: str) -> Optional[Dict[str, int]]:
-        """Retrieve a schedule record by name."""
-        cur = self.conn.execute(
-            "SELECT name, interval FROM schedules WHERE name = ?",
-            (name,),
-        )
-        row = cur.fetchone()
-        if row:
-            return {"name": row["name"], "interval": row["interval"]}
-        return None
-
-    def update_schedule(self, name: str, interval: int) -> bool:
-        """Update the interval for a schedule."""
-        with self.conn:
-            cur = self.conn.execute(
-                "UPDATE schedules SET interval = ? WHERE name = ?",
-                (interval, name),
-            )
-            return cur.rowcount > 0
-
-    def delete_schedule(self, name: str) -> bool:
-        """Delete a schedule record."""
-        with self.conn:
-            cur = self.conn.execute(
-                "DELETE FROM schedules WHERE name = ?",
-                (name,),
-            )
-            return cur.rowcount > 0
-
-    def list_schedules(self) -> List[Dict[str, int]]:
-        """Return all schedules stored in the database."""
-        cur = self.conn.execute("SELECT name, interval FROM schedules")
-        return [
-            {"name": row["name"], "interval": row["interval"]}
-            for row in cur.fetchall()
-        ]
-
-    def __del__(self) -> None:
-        """Close the database connection when the manager is deleted."""
-        try:
-            self.conn.close()
-        except Exception:
-            pass
-
-    def add_task(self, name: str, func: Callable, interval: int) -> schedule.Job:
-        """Add a job that runs every ``interval`` seconds and persist it."""
-        job = schedule.every(interval).seconds.do(func)
-        self.jobs[name] = job
-
-        logger.log(f"Added task '{name}' to run every {interval} seconds")
-
-        with self.conn:
-            self.conn.execute(
-                "INSERT OR REPLACE INTO schedules (name, interval) VALUES (?, ?)",
-                (name, interval),
-            )
-
-        return job
-
-    def remove_task(self, name: str) -> bool:
-        """Remove a scheduled job by name and delete its record."""
-        job = self.jobs.pop(name, None)
-        if job:
-            schedule.cancel_job(job)
-            self.delete_schedule(name)
-
-    """Manage scheduled jobs using the schedule package and SQLite."""
+    """Manage scheduled jobs using the :mod:`schedule` package with persistence."""
 
     def __init__(self, db_path: str = "data/schedules.db") -> None:
-        """Initialize the manager and load tasks from ``db_path``.
+        """Initialize the manager and load any stored tasks.
 
-        The SQLite database is created automatically if it does not exist.
+        Args:
+            db_path: Location of the SQLite database file.
         """
         self.db_path = db_path
         os.makedirs(os.path.dirname(self.db_path) or ".", exist_ok=True)
 
         self._conn = sqlite3.connect(self.db_path)
+        self._conn.row_factory = sqlite3.Row
         self._init_db()
 
         self.jobs: Dict[str, schedule.Job] = {}
         self._load_tasks()
+        logger.log("ScheduleManager initialized")
 
     # ------------------------------------------------------------------
-    # database handling
+    # SQLite setup and persistence helpers
     # ------------------------------------------------------------------
+
 
     def _init_db(self) -> None:
         """Create the tasks table if it doesn't exist."""
+
+    def _init_db(self) -> None:
+        """Create required tables if they don't exist."""
+
         with self._conn:
+            self._conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS schedules (
+                    name TEXT PRIMARY KEY,
+                    interval INTEGER NOT NULL
+                )
+                """
+            )
             self._conn.execute(
                 """
                 CREATE TABLE IF NOT EXISTS tasks (
@@ -144,7 +82,11 @@ class ScheduleManager:
             )
 
     def _load_tasks(self) -> None:
+
         """Load all tasks from the database and schedule them."""
+
+        """Load persisted tasks from the database."""
+
         cursor = self._conn.execute(
             "SELECT name, module, func_name, interval FROM tasks"
         )
@@ -158,37 +100,114 @@ class ScheduleManager:
             job = schedule.every(interval).seconds.do(func)
             self.jobs[name] = job
 
+
     def _persist_task(self, name: str, func: Callable, interval: int) -> None:
+
+    def _persist_task(
+        self, name: str, func: Callable[..., object], interval: int
+    ) -> None:
+
         """Persist a task definition to the database."""
         with self._conn:
             self._conn.execute(
-                "INSERT OR REPLACE INTO tasks (name, module, func_name, interval)"
-                " VALUES (?, ?, ?, ?)",
+                """
+                INSERT OR REPLACE INTO tasks (name, module, func_name, interval)
+                VALUES (?, ?, ?, ?)
+                """,
                 (name, func.__module__, func.__name__, interval),
+            )
+            self._conn.execute(
+                "INSERT OR REPLACE INTO schedules (name, interval) VALUES (?, ?)",
+                (name, interval),
             )
 
     def _delete_task(self, name: str) -> None:
         """Remove a task from the database."""
         with self._conn:
             self._conn.execute("DELETE FROM tasks WHERE name = ?", (name,))
+            self._conn.execute("DELETE FROM schedules WHERE name = ?", (name,))
+
+    # ------------------------------------------------------------------
+    # Public SQLite CRUD API
+    # ------------------------------------------------------------------
+    def create_schedule(self, name: str, interval: int) -> None:
+        """Insert a schedule record."""
+        with self._conn:
+            self._conn.execute(
+                "INSERT INTO schedules (name, interval) VALUES (?, ?)",
+                (name, interval),
+            )
+
 
     def add_task(self, name: str, func: Callable, interval: int) -> schedule.Job:
+
+    def get_schedule(self, name: str) -> Optional[Dict[str, int]]:
+        """Retrieve a schedule record by ``name``."""
+        cur = self._conn.execute(
+            "SELECT name, interval FROM schedules WHERE name = ?",
+            (name,),
+        )
+        row = cur.fetchone()
+        if row:
+            return {"name": row["name"], "interval": row["interval"]}
+        return None
+
+    def update_schedule(self, name: str, interval: int) -> bool:
+        """Update the ``interval`` for a schedule."""
+        with self._conn:
+            cur = self._conn.execute(
+                "UPDATE schedules SET interval = ? WHERE name = ?",
+                (interval, name),
+            )
+            updated = cur.rowcount > 0
+        if updated and name in self.jobs:
+            # reschedule running job
+            func = self.jobs[name].job_func
+            schedule.cancel_job(self.jobs[name])
+            self.jobs[name] = schedule.every(interval).seconds.do(func)
+        return updated
+
+    def delete_schedule(self, name: str) -> bool:
+        """Delete a schedule record."""
+        with self._conn:
+            cur = self._conn.execute(
+                "DELETE FROM schedules WHERE name = ?",
+                (name,),
+            )
+            return cur.rowcount > 0
+
+    def list_schedules(self) -> List[Dict[str, int]]:
+        """Return all schedules stored in the database."""
+        cur = self._conn.execute("SELECT name, interval FROM schedules")
+        return [
+            {"name": row["name"], "interval": row["interval"]} for row in cur.fetchall()
+        ]
+
+    # ------------------------------------------------------------------
+    # Task scheduling API
+    # ------------------------------------------------------------------
+    def add_task(
+        self, name: str, func: Callable[..., object], interval: int
+    ) -> schedule.Job:
+
         """Add a job that runs every ``interval`` seconds and persist it."""
         job = schedule.every(interval).seconds.do(func)
         self.jobs[name] = job
+        logger.log(f"Added task '{name}' to run every {interval} seconds")
         self._persist_task(name, func, interval)
         return job
 
     def remove_task(self, name: str) -> bool:
+
         """Remove a scheduled job by name."""
+
+        """Remove a scheduled job by ``name`` and delete its record."""
+
         job = self.jobs.pop(name, None)
         if job:
             schedule.cancel_job(job)
-            logger.log(f"Removed task '{name}'")
-
             self._delete_task(name)
-
-
+            logger.log(f"Removed task '{name}'")
             return True
         logger.log(f"Attempted to remove unknown task '{name}'")
         return False
@@ -199,10 +218,20 @@ class ScheduleManager:
         return dict(self.jobs)
 
     def run_pending(self) -> None:
+
         """Run all jobs that are scheduled to run."""
+
+        """Execute any tasks that are due to run."""
+
         logger.log("Running pending scheduled tasks")
         schedule.run_pending()
 
     def close(self) -> None:
         """Close the underlying SQLite connection."""
         self._conn.close()
+
+    def __del__(self) -> None:
+        try:
+            self.close()
+        except Exception:
+            pass
