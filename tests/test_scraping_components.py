@@ -4,20 +4,22 @@ from unittest.mock import patch
 import json
 
 
-from src.scraping.scraper_engine import ScraperEngine
-from src.scraping.content_extractor import ContentExtractor
-from src.scraping.output_manager import OutputManager
+from cinder_web_scraper.scraping.scraper_engine import ScraperEngine
+from cinder_web_scraper.scraping.content_extractor import ContentExtractor
+from cinder_web_scraper.scraping.output_manager import OutputManager
 
 
 
 def test_scraper_engine_scrape():
-    engine = ScraperEngine()
-    assert engine.scrape("https://example.com") is None
+    engine = ScraperEngine(delay=0)
+    content = engine.scrape("https://example.com")
+    assert isinstance(content, str)
+    assert "<html" in content
 
 
 def test_content_extractor_extract():
     extractor = ContentExtractor()
-    assert extractor.extract("<html></html>") is None
+    assert extractor.extract("<html></html>") == [""]
 
 class DummyResponse:
     def __init__(self, text: str, status: int = 200):
@@ -59,7 +61,7 @@ def test_extractor_selector():
 def test_output_manager_save(tmp_path):
     manager = OutputManager()
 
-    assert manager.save({}, str(tmp_path / "out.json")) is None
+    assert manager.save({}, str(tmp_path / "out.json")) is True
 
     path = tmp_path / "out.txt"
     assert manager.save("hello", str(path)) is True
