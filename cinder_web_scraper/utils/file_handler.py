@@ -32,23 +32,13 @@ class FileHandler:
             OSError: For any other I/O related errors.
         """
         try:
-
             with open(path, "r", encoding="utf-8") as fp:
                 content = fp.read()
-            logger.log(f"Read file: {path}")
-            return content
-        except OSError as exc:
+        except (FileNotFoundError, PermissionError, OSError) as exc:
             logger.log(f"Failed to read file {path}: {exc}")
             raise
-
-            with open(path, "r", encoding="utf-8") as fh:
-                return fh.read()
-        except FileNotFoundError:
-            raise
-        except PermissionError:
-            raise
-        except OSError as exc:
-            raise OSError(f"Failed to read '{path}'") from exc
+        logger.log(f"Read file: {path}")
+        return content
 
 
     def write(self, path: str, data: str) -> None:
@@ -65,20 +55,11 @@ class FileHandler:
             OSError: For any other I/O related errors.
         """
         try:
-
             Path(path).parent.mkdir(parents=True, exist_ok=True)
             with open(path, "w", encoding="utf-8") as fp:
                 fp.write(data)
-            logger.log(f"Wrote file: {path}")
-        except OSError as exc:
+        except (PermissionError, OSError) as exc:
             logger.log(f"Failed to write file {path}: {exc}")
             raise
-
-            os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
-            with open(path, "w", encoding="utf-8") as fh:
-                fh.write(data)
-        except PermissionError:
-            raise
-        except OSError as exc:
-            raise OSError(f"Failed to write to '{path}'") from exc
+        logger.log(f"Wrote file: {path}")
 
