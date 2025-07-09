@@ -3,9 +3,9 @@ from unittest.mock import patch
 
 from bs4 import BeautifulSoup
 
-from src.scraping.scraper_engine import ScraperEngine
-from src.scraping.content_extractor import ContentExtractor
-from src.scraping.output_manager import OutputManager
+from cinder_web_scraper.scraping.scraper_engine import ScraperEngine
+from cinder_web_scraper.scraping.content_extractor import ContentExtractor
+from cinder_web_scraper.scraping.output_manager import OutputManager
 
 
 class DummyExtractor(ContentExtractor):

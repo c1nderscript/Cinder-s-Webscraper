@@ -14,7 +14,7 @@ import os
 import sqlite3
 from typing import Callable, Dict
 
-from src.utils.logger import default_logger as logger
+from cinder_web_scraper.utils.logger import default_logger as logger
 
 
 import schedule

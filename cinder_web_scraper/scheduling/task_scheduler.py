@@ -2,7 +2,7 @@
 
 from typing import Any, Callable, Dict, List, Tuple
 
-from src.utils.logger import default_logger as logger
+from cinder_web_scraper.utils.logger import default_logger as logger
 
 
 class TaskScheduler:
