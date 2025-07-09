@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from src.scraping.output_manager import OutputManager
+from cinder_web_scraper.scraping.output_manager import OutputManager
 
 
 @pytest.fixture

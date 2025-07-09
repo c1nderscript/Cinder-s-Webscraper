@@ -1,5 +1,5 @@
 
-from src.utils.logger import Logger
+from cinder_web_scraper.utils.logger import Logger
 
 
 def test_log_output(tmp_path):
@@ -13,7 +13,7 @@ def test_log_output(tmp_path):
 
 import logging
 
-from src.utils.logger import get_logger, log_exception
+from cinder_web_scraper.utils.logger import get_logger, log_exception
 
 
 def test_get_logger_returns_logger():
