@@ -6,7 +6,7 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 from typing import Any, Dict
 
-from src.utils import config_manager
+from cinder_web_scraper.utils import config_manager
 
 
 class SettingsPanel:
