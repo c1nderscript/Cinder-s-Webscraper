@@ -1,5 +1,5 @@
 import pytest
-from src.scraping.content_extractor import ContentExtractor
+from cinder_web_scraper.scraping.content_extractor import ContentExtractor
 
 
 def test_basic_html():
@@ -9,7 +9,7 @@ def test_basic_html():
         "<img src='image.jpg'/></body></html>"
     )
     extractor = ContentExtractor()
-    result = extractor.extract(html)
+    result = extractor.extract_structured(html)
     assert result["title"] == "Test Page"
     assert result["links"] == ["http://example.com"]
     assert result["images"] == ["image.jpg"]
@@ -19,7 +19,7 @@ def test_basic_html():
 def test_missing_elements():
     html = "<html><body><p>No links or images here</p></body></html>"
     extractor = ContentExtractor()
-    result = extractor.extract(html)
+    result = extractor.extract_structured(html)
     assert result["title"] is None
     assert result["links"] == []
     assert result["images"] == []
@@ -28,7 +28,7 @@ def test_missing_elements():
 
 def test_empty_html():
     extractor = ContentExtractor()
-    result = extractor.extract("")
+    result = extractor.extract_structured("")
     assert result["title"] is None
     assert result["links"] == []
     assert result["images"] == []

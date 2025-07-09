@@ -1,28 +1,30 @@
 import os
 import pytest
 from unittest.mock import patch, MagicMock
-from src.gui.main_window import MainWindow
-from src.gui.scheduler_dialog import SchedulerDialog
-from src.gui.settings_panel import SettingsPanel
-from src.gui.website_manager import WebsiteManager
+from cinder_web_scraper.gui.main_window import MainWindow
+from cinder_web_scraper.gui.scheduler_dialog import SchedulerDialog
+from cinder_web_scraper.gui.settings_panel import SettingsPanel
+from cinder_web_scraper.gui.website_manager import WebsiteManager
 
 
 @pytest.mark.skipif(os.environ.get('CI') == 'true', reason='Skipping GUI tests in CI environment')
-@patch('src.gui.main_window.tk')
+@patch('cinder_web_scraper.gui.main_window.tk')
 def test_main_window_show_returns_none(mock_tk):
     # Mock tkinter to avoid display issues in CI
     mock_tk.Tk.return_value = MagicMock()
-    window = MainWindow()
+    window = MainWindow(mock_tk.Tk())
     assert window.show() is None
 
 
-def test_scheduler_dialog_open_returns_none():
-    dialog = SchedulerDialog()
+@patch('cinder_web_scraper.gui.scheduler_dialog.tk')
+def test_scheduler_dialog_open_returns_none(mock_tk):
+    dialog = SchedulerDialog(parent=mock_tk.Tk())
     assert dialog.open() is None
 
 
-def test_settings_panel_open_returns_none():
-    panel = SettingsPanel()
+@patch('cinder_web_scraper.gui.settings_panel.tk')
+def test_settings_panel_open_returns_none(mock_tk):
+    panel = SettingsPanel(parent=mock_tk.Tk())
     assert panel.open() is None
 
 

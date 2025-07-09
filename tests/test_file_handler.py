@@ -1,5 +1,6 @@
 
-from src.utils.file_handler import FileHandler
+import pytest
+from cinder_web_scraper.utils.file_handler import FileHandler
 
 
 def test_read_write(tmp_path):
@@ -12,10 +13,6 @@ def test_read_write(tmp_path):
     assert content == "hello world"
 
 import os
-
-import pytest
-
-from src.utils.file_handler import FileHandler
 
 
 @pytest.fixture()
