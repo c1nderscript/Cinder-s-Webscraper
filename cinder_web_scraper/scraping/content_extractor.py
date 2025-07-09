@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Optional
 
 from bs4 import BeautifulSoup
 
-from src.utils.logger import default_logger as logger
+from cinder_web_scraper.utils.logger import default_logger as logger
 
 class ContentExtractor:
     """Parse HTML and return structured data or text from selected elements."""
