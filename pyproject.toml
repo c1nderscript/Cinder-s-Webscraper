@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cinder-web-scraper"
+version = "0.1.0"
+description = "GUI-based web scraper application"
+authors = [{name = "Cinder"}]
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "schedule==1.2.2",
+]
+
+[project.scripts]
+cinder-web-scraper = "cinder_web_scraper.__main__:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest==8.4.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]

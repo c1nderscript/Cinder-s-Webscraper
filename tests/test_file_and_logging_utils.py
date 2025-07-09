@@ -1,0 +1,15 @@
+import builtins
+from src.utils.file_handler import FileHandler
+from src.utils.logger import get_logger
+
+
+def test_file_handler_methods_return_none(tmp_path):
+    fh = FileHandler()
+    assert fh.read(str(tmp_path / 'file.txt')) is None
+    assert fh.write(str(tmp_path / 'file.txt'), 'data') is None
+
+
+def test_logger_get_logger_returns_logger():
+    logger = get_logger('test')
+    assert logger is not None
+    assert logger.name == 'test'

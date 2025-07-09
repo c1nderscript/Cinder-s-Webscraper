@@ -2,6 +2,8 @@
 
 from typing import Any, Callable, Dict, List, Tuple
 
+from src.utils.logger import default_logger as logger
+
 
 class TaskScheduler:
     """Simple in-memory task scheduler."""
@@ -11,6 +13,7 @@ class TaskScheduler:
         self.tasks: List[
             Tuple[Callable[..., Any], Tuple[Any, ...], Dict[str, Any]]
         ] = []
+        logger.log("TaskScheduler initialized")
 
     def add_task(
         self, func: Callable[..., Any], *args: Any, **kwargs: Any
@@ -23,9 +26,12 @@ class TaskScheduler:
             **kwargs: Keyword arguments for ``func``.
         """
         self.tasks.append((func, args, kwargs))
+        logger.log(f"Scheduled task {func.__name__}")
 
     def run_all(self) -> None:
         """Run all scheduled tasks in the order they were added."""
         for func, args, kwargs in list(self.tasks):
+            logger.log(f"Running task {func.__name__}")
             func(*args, **kwargs)
         self.tasks.clear()
+        logger.log("All scheduled tasks completed")
