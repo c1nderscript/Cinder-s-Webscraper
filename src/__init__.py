@@ -1,4 +1,12 @@
+
 """Compatibility layer exposing :mod:`cinder_web_scraper` as ``src``."""
+
+
+"""Backward compatibility package exposing :mod:`cinder_web_scraper` as ``src``.
+
+This allows legacy imports such as ``import src.gui`` to resolve to the
+corresponding modules in :mod:`cinder_web_scraper`.
+
 
 from importlib import import_module
 import sys
