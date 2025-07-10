@@ -175,6 +175,7 @@ As features are implemented, this will provide buttons to manage websites, sched
 1. Edit `data/websites.json` to add the sites you want to scrape.
 2. Run `python main.py` (or use the GUI) to start the scheduler.
 3. Scraped data appears in the `output/` directory following the configured format.
+4. Click **Update** in the GUI toolbar to pull the latest code from your configured remote.
 
 ## Logging Configuration
 
