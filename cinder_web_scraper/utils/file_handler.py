@@ -48,7 +48,6 @@ class FileHandler:
         except (FileNotFoundError, PermissionError, OSError) as exc:
             logger.log(f"Failed to read file {path}: {exc}")
 
-
         except FileNotFoundError:
             logger.error(f"File not found: {path}")
             raise
@@ -59,7 +58,6 @@ class FileHandler:
             logger.error(f"Failed to read file {path}: {exc}")
 
             raise
-
 
     def write(self, path: str, data: str) -> None:
         """Write ``data`` to ``path``.
@@ -78,6 +76,7 @@ class FileHandler:
             Path(path).parent.mkdir(parents=True, exist_ok=True)
             with open(path, "w", encoding="utf-8") as fp:
                 fp.write(data)
+                
             logger.info(f"Wrote file: {path}")
         except (PermissionError, OSError) as exc:
             self._log_and_raise(f"Failed to write file {path}", exc)
@@ -85,7 +84,6 @@ class FileHandler:
             logger.log(f"Wrote file: {path}")
         except (PermissionError, OSError) as exc:
             logger.log(f"Failed to write file {path}: {exc}")
-
 
             logger.info(f"Wrote file: {path}")
         except PermissionError as exc:
@@ -107,4 +105,6 @@ class FileHandler:
 
             raise
 
+
+            raise
 
