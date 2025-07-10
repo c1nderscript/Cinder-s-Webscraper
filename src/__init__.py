@@ -1,28 +1,20 @@
-
 """Compatibility layer exposing :mod:`cinder_web_scraper` as ``src``."""
+
 from importlib import import_module
 import sys
+from types import ModuleType
 
 _MODULES = ["utils", "gui", "scraping", "scheduling", "main"]
 
 __all__ = list(_MODULES)
 
+# Preload submodules to allow ``import src.utils`` style imports
+for _mod in _MODULES:
+    sys.modules[f"src.{_mod}"] = import_module(f"cinder_web_scraper.{_mod}")
 
-def __getattr__(name: str):
+
+def __getattr__(name: str) -> ModuleType:
+    """Return the mapped submodule if present."""
     if name in _MODULES:
-        module = import_module(f"cinder_web_scraper.{name}")
-        sys.modules[f"src.{name}"] = module
-        return module
+        return sys.modules[f"src.{name}"]
     raise AttributeError(f"module 'src' has no attribute '{name}'")
-
-"""Compatibility layer mapping the legacy ``src`` namespace to ``cinder_web_scraper``."""
-
-import sys
-from importlib import import_module
-
-PACKAGE = "cinder_web_scraper"
-
-# Map submodules to maintain backward compatibility with the old ``src``
-# namespace. Import ``utils`` first as other modules depend on it.
-for _mod in ["utils", "scheduling", "scraping", "gui", "main"]:
-    sys.modules[f"src.{_mod}"] = import_module(f"{PACKAGE}.{_mod}")
