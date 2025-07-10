@@ -12,7 +12,14 @@ from cinder_web_scraper.scraping.output_manager import OutputManager
 
 def test_scraper_engine_scrape():
     engine = ScraperEngine(delay=0)
-    content = engine.scrape("https://example.com")
+    html = "<html><head><title>Example Domain</title></head><body></body></html>"
+    response = DummyResponse(html)
+
+    with patch.object(engine.session, "get", return_value=response) as mock_get, \
+         patch("time.sleep"):
+        content = engine.scrape("https://example.com")
+
+    mock_get.assert_called_once()
     assert isinstance(content, str)
     assert "<html" in content
 
