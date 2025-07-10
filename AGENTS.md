@@ -564,6 +564,7 @@ def safe_operation(param: str) -> Optional[str]:
 - **API Reference**: Complete API documentation
 - **Architecture Overview**: High-level system design
 - **Contributing Guidelines**: How to contribute to the project
+- **Setup Script (`setup.sh`)**: Maintain a root-level setup.sh that installs dependencies and prepares the environment for Codex agents. Update this script whenever project requirements change.
 
 ## Monitoring and Logging
 
