@@ -1,5 +1,10 @@
 
-"""Compatibility layer exposing :mod:`cinder_web_scraper` as ``src``."""
+"""Backward compatibility package exposing :mod:`cinder_web_scraper` as ``src``.
+
+This allows legacy imports such as ``import src.gui`` to resolve to the
+corresponding modules in :mod:`cinder_web_scraper`.
+"""
+
 from importlib import import_module
 import sys
 
@@ -14,15 +19,3 @@ def __getattr__(name: str):
         sys.modules[f"src.{name}"] = module
         return module
     raise AttributeError(f"module 'src' has no attribute '{name}'")
-
-"""Compatibility layer mapping the legacy ``src`` namespace to ``cinder_web_scraper``."""
-
-import sys
-from importlib import import_module
-
-PACKAGE = "cinder_web_scraper"
-
-# Map submodules to maintain backward compatibility with the old ``src``
-# namespace. Import ``utils`` first as other modules depend on it.
-for _mod in ["utils", "scheduling", "scraping", "gui", "main"]:
-    sys.modules[f"src.{_mod}"] = import_module(f"{PACKAGE}.{_mod}")
