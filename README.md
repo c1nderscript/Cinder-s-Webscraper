@@ -170,6 +170,11 @@ python -m cinder_web_scraper.gui.main_window
 
 As features are implemented, this will provide buttons to manage websites, scheduling options, and view logs.
 
+### Updating the repository
+
+Use the **Tools → Update** menu item in the GUI to run ``git pull`` and refresh
+the local code. A message box reports whether the update succeeded.
+
 ## Example Workflow
 
 1. Edit `data/websites.json` to add the sites you want to scrape.
