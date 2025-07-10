@@ -7,6 +7,7 @@ from tkinter import messagebox, ttk
 from typing import Callable, Optional
 
 from cinder_web_scraper.utils.logger import get_logger, log_exception
+from cinder_web_scraper.utils.updater import update_application
 
 logger = get_logger(__name__)
 
@@ -72,6 +73,11 @@ class MainWindow:
             text="Settings",
             command=self._on_settings,
         ).pack(side=tk.LEFT, padx=2, pady=2)
+        ttk.Button(
+            toolbar,
+            text="Update",
+            command=self._update_app,
+        ).pack(side=tk.LEFT, padx=2, pady=2)
         toolbar.pack(fill=tk.X)
 
         # Website list
@@ -135,6 +141,15 @@ class MainWindow:
     def _on_settings(self) -> None:
         if self.on_settings:
             self.on_settings()
+
+    def _update_app(self) -> None:
+        """Run application update and show a message box with the result."""
+
+        success, msg = update_application()
+        if success:
+            messagebox.showinfo("Update", f"Application updated:\n{msg}")
+        else:
+            messagebox.showerror("Update Failed", msg)
 
     def show(self) -> None:
         """Display the main window with basic error handling."""
