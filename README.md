@@ -216,6 +216,12 @@ PY
 
 Future releases will bundle a launcher script that opens the GUI directly.
 
+## Updating the Repository
+
+The GUI offers a convenient way to pull the latest changes. Choose
+**Tools → Update Repo** from the menu and confirm the prompt. The application
+will run ``git pull`` and notify you whether the update succeeded.
+
 ## Troubleshooting
 
 If the application fails to start or tests do not run, try the following:

@@ -7,6 +7,7 @@ from tkinter import messagebox, ttk
 from typing import Callable, Optional
 
 from cinder_web_scraper.utils.logger import get_logger, log_exception
+from cinder_web_scraper.utils.repo_updater import update_repo
 
 logger = get_logger(__name__)
 
@@ -51,7 +52,9 @@ class MainWindow:
         file_menu.add_command(label="Exit", command=self.root.quit)
         menubar.add_cascade(label="File", menu=file_menu)
         menubar.add_cascade(label="Edit", menu=tk.Menu(menubar, tearoff=0))
-        menubar.add_cascade(label="Tools", menu=tk.Menu(menubar, tearoff=0))
+        tools_menu = tk.Menu(menubar, tearoff=0)
+        tools_menu.add_command(label="Update Repo", command=self._on_update_repo)
+        menubar.add_cascade(label="Tools", menu=tools_menu)
         menubar.add_cascade(label="Help", menu=tk.Menu(menubar, tearoff=0))
         self.root.config(menu=menubar)
 
@@ -135,6 +138,19 @@ class MainWindow:
     def _on_settings(self) -> None:
         if self.on_settings:
             self.on_settings()
+
+    def _on_update_repo(self) -> None:
+        """Pull the latest changes from the git repository."""
+
+        if not messagebox.askyesno(
+            "Update Repository", "Pull latest changes from the repository?"
+        ):
+            return
+
+        if update_repo():
+            messagebox.showinfo("Update", "Repository updated successfully")
+        else:
+            messagebox.showerror("Update", "Failed to update repository")
 
     def show(self) -> None:
         """Display the main window with basic error handling."""
