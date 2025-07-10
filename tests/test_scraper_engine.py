@@ -63,13 +63,28 @@ def test_scrape_retries(tmp_path):
 def test_scraper_engine_scrape_returns_content():
     """Test that scraper engine can successfully fetch content."""
     engine = ScraperEngine(delay=0)
+
+    html = "<html><head><title>Example Domain</title></head><body></body></html>"
+
     html = (
         "<html><head><title>Example Domain</title></head>"
         "<body>Example Domain</body></html>"
     )
+
     response = requests.Response()
     response.status_code = 200
     response._content = html.encode()
+
+
+    with patch.object(engine.session, "get", return_value=response) as mock_get, \
+         patch("time.sleep"):
+        result = engine.scrape('http://example.com')
+
+    mock_get.assert_called_once()
+    # Should return HTML content, not None, for a valid URL
+    assert result is not None
+    assert isinstance(result, str)
+    assert 'Example Domain' in result
 
     with patch("requests.Session.get", return_value=response) as mock_get:
         result = engine.scrape("http://example.com")
@@ -82,11 +97,20 @@ def test_scraper_engine_scrape_returns_content():
 
 def test_scraper_engine_scrape_returns_none_for_invalid_url():
     """Test that scraper engine returns None for invalid URLs."""
+
+    engine = ScraperEngine(delay=0, config={"retries": 1})
+    with patch.object(engine.session, "get", side_effect=requests.RequestException) as mock_get, \
+         patch("time.sleep"):
+        result = engine.scrape('http://invalid-url-that-does-not-exist-12345.com')
+
+    mock_get.assert_called_once()
+
     engine = ScraperEngine(delay=0)
     with patch(
         "requests.Session.get", side_effect=requests.RequestException
     ) as mock_get:
         result = engine.scrape("http://invalid-url-that-does-not-exist-12345.com")
+
     # Should return None for invalid URLs
     assert result is None
     assert mock_get.called
@@ -94,16 +118,30 @@ def test_scraper_engine_scrape_returns_none_for_invalid_url():
 
 def test_scraper_engine_scrape_working_url():
     engine = ScraperEngine(delay=0)
+
+    html = "<html><head><title>Example Domain</title></head><body></body></html>"
+
     html = (
         "<html><head><title>Example Domain</title></head>"
         "<body>Example Domain</body></html>"
     )
+
     response = requests.Response()
     response.status_code = 200
     response._content = html.encode()
+
+
+    with patch.object(engine.session, "get", return_value=response) as mock_get, \
+         patch("time.sleep"):
+        content = engine.scrape('http://example.com')
+
+    mock_get.assert_called_once()
+    assert '<html>' in content
+    assert '<title>Example Domain</title>' in content
 
     with patch("requests.Session.get", return_value=response) as mock_get:
         content = engine.scrape("http://example.com")
     assert "<html>" in content
     assert "<title>Example Domain</title>" in content
     assert mock_get.called
+

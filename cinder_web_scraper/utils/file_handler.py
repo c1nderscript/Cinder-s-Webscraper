@@ -22,24 +22,16 @@ class FileHandler:
         raise exc
 
     def read(self, path: str) -> str:
-        """Return the contents of ``path``.
-
-        Args:
-            path: Path to the file to read.
-
-        Returns:
-            The contents of the file.
-
-        Raises:
-            FileNotFoundError: If ``path`` does not exist.
-            PermissionError: If the file cannot be read due to permissions.
-            OSError: For any other I/O related errors.
-        """
+        """Return the contents of ``path``."""
         try:
             with open(path, "r", encoding="utf-8") as fp:
                 content = fp.read()
             logger.log(f"Read file: {path}")
             return content
+
+        except (FileNotFoundError, PermissionError, OSError) as exc:
+            logger.error(f"Failed to read file {path}: {exc}")
+
 
         except (FileNotFoundError, PermissionError, OSError) as exc:
             self._log_and_raise(f"Failed to read file {path}", exc)
@@ -76,6 +68,11 @@ class FileHandler:
             Path(path).parent.mkdir(parents=True, exist_ok=True)
             with open(path, "w", encoding="utf-8") as fp:
                 fp.write(data)
+
+            logger.info(f"Wrote file: {path}")
+        except (PermissionError, OSError) as exc:
+            logger.error(f"Failed to write file {path}: {exc}")
+
                 
             logger.info(f"Wrote file: {path}")
         except (PermissionError, OSError) as exc:
@@ -105,7 +102,6 @@ class FileHandler:
 
 
             raise
-
 
 
             raise
