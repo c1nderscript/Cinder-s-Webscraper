@@ -225,6 +225,9 @@ If the application fails to start or tests do not run, try the following:
 2. **Dependencies** – reinstall packages with ``pip install -r requirements.txt``.
 3. **Virtual environment issues** – deactivate and recreate the virtual
    environment if modules are missing.
+4. **Update button errors** – confirm the repository has a configured remote
+   and that your Git credentials allow pulling updates. Commit or stash local
+   changes if merge conflicts occur.
 
 ## FAQ
 
@@ -257,6 +260,24 @@ Configuration data is stored under the `data/` directory:
 - `data/schedules.db` – Planned job database
 
 These files are created automatically when saving via `config_manager` or scheduling utilities. Logs are written to `data/logs/`.
+
+## Update Button
+
+The GUI provides an **Update** button that pulls the latest changes from your configured Git remote. Clicking the button is equivalent to running:
+
+```bash
+git pull --ff-only
+```
+
+### Prerequisites
+
+1. The scraper directory must be a Git repository with a remote (typically `origin`).
+2. If your remote requires authentication, ensure your credentials are saved via SSH keys or a credential helper so `git pull` can succeed.
+
+### How it Works
+
+When the button is pressed the application executes `git pull` in the project folder. If there are uncommitted local changes that would result in a merge conflict, the update is cancelled and an error message is displayed.
+
 
 ## Example Scraping Workflow
 
