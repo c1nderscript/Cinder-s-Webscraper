@@ -96,6 +96,7 @@ class FileHandler:
 
 
 
+
         except (PermissionError, OSError) as exc:
             logger.log(f"Failed to write file {path}: {exc}")
 
@@ -104,6 +105,7 @@ class FileHandler:
 
 
             raise
+
 
 
             raise
