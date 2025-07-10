@@ -38,10 +38,6 @@ class FileHandler:
             raise
         except OSError as exc:
             logger.error(f"Failed to read file {path}: {exc}")
-
-        except (FileNotFoundError, PermissionError, OSError) as exc:
-            logger.log(f"Failed to read file {path}: {exc}")
-
             raise
 
 
@@ -71,8 +67,10 @@ class FileHandler:
         except OSError as exc:
             logger.error(f"Failed to write file {path}: {exc}")
 
+
         except (PermissionError, OSError) as exc:
             logger.log(f"Failed to write file {path}: {exc}")
+
 
             raise
 
