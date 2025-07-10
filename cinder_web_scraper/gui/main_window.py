@@ -7,6 +7,9 @@ from tkinter import messagebox, ttk
 from typing import Callable, Optional
 
 from cinder_web_scraper.utils.logger import get_logger, log_exception
+
+from cinder_web_scraper.utils.update_repo import update_repo
+
 from cinder_web_scraper.utils.updater import update_repo
 
 from cinder_web_scraper.utils.updater import update_application
@@ -91,7 +94,11 @@ class MainWindow:
         ttk.Button(
             toolbar,
             text="Update",
+
+            command=self._update_repo,
+
             command=self._update_app,
+
         ).pack(side=tk.LEFT, padx=2, pady=2)
         toolbar.pack(fill=tk.X)
 
@@ -157,6 +164,15 @@ class MainWindow:
         if self.on_settings:
             self.on_settings()
 
+
+    def _update_repo(self) -> None:
+        """Attempt to update the repository and show a message box."""
+        try:
+            output = update_repo()
+            messagebox.showinfo("Update", f"Repository updated:\n{output}")
+        except Exception as exc:  # pragma: no cover - subprocess failures
+            messagebox.showerror("Update Failed", str(exc))
+
     def _on_update(self) -> None:
         """Pull the latest changes from the repository."""
         success = update_repo()
@@ -185,6 +201,7 @@ class MainWindow:
             messagebox.showinfo("Update", "Repository updated successfully")
         else:
             messagebox.showerror("Update", "Failed to update repository")
+
 
     def show(self) -> None:
         """Display the main window with basic error handling."""
