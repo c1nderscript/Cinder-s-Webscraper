@@ -63,23 +63,45 @@ def test_scrape_retries(tmp_path):
 def test_scraper_engine_scrape_returns_content():
     """Test that scraper engine can successfully fetch content."""
     engine = ScraperEngine(delay=0)
-    result = engine.scrape('http://example.com')
+    html = "<html><head><title>Example Domain</title></head><body></body></html>"
+    response = requests.Response()
+    response.status_code = 200
+    response._content = html.encode()
+
+    with patch.object(engine.session, "get", return_value=response) as mock_get, \
+         patch("time.sleep"):
+        result = engine.scrape('http://example.com')
+
+    mock_get.assert_called_once()
     # Should return HTML content, not None, for a valid URL
     assert result is not None
     assert isinstance(result, str)
-    assert 'Example Domain' in result  # example.com contains this text
+    assert 'Example Domain' in result
 
 
 def test_scraper_engine_scrape_returns_none_for_invalid_url():
     """Test that scraper engine returns None for invalid URLs."""
-    engine = ScraperEngine(delay=0)
-    result = engine.scrape('http://invalid-url-that-does-not-exist-12345.com')
+    engine = ScraperEngine(delay=0, config={"retries": 1})
+    with patch.object(engine.session, "get", side_effect=requests.RequestException) as mock_get, \
+         patch("time.sleep"):
+        result = engine.scrape('http://invalid-url-that-does-not-exist-12345.com')
+
+    mock_get.assert_called_once()
     # Should return None for invalid URLs
     assert result is None
 
 
 def test_scraper_engine_scrape_working_url():
     engine = ScraperEngine(delay=0)
-    content = engine.scrape('http://example.com')
-    assert '<html>' in content 
+    html = "<html><head><title>Example Domain</title></head><body></body></html>"
+    response = requests.Response()
+    response.status_code = 200
+    response._content = html.encode()
+
+    with patch.object(engine.session, "get", return_value=response) as mock_get, \
+         patch("time.sleep"):
+        content = engine.scrape('http://example.com')
+
+    mock_get.assert_called_once()
+    assert '<html>' in content
     assert '<title>Example Domain</title>' in content
