@@ -1,5 +1,9 @@
-
-from cinder_web_scraper.utils.logger import Logger
+import logging
+from cinder_web_scraper.utils.logger import (
+    Logger,
+    get_logger,
+    log_exception,
+)
 
 
 def test_log_output(tmp_path):
@@ -10,10 +14,6 @@ def test_log_output(tmp_path):
     assert log_file.exists()
     contents = log_file.read_text()
     assert "sample message" in contents
-
-import logging
-
-from cinder_web_scraper.utils.logger import get_logger, log_exception
 
 
 def test_get_logger_returns_logger():
@@ -27,5 +27,6 @@ def test_log_exception_does_not_raise():
         raise ValueError("boom")
     except ValueError as exc:
         log_exception(logger, "testing", exc)
+    assert True
 
 
