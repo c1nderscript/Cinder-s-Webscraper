@@ -1,3 +1,7 @@
+
+"""High-level interface for managing recurring tasks with SQLite persistence."""
+
+
 from __future__ import annotations
 
 import importlib
@@ -11,10 +15,28 @@ from cinder_web_scraper.utils.logger import default_logger as logger
 
 
 class ScheduleManager:
+
     """Manage scheduled jobs using the :mod:`schedule` package with SQLite persistence."""
 
     def __init__(self, db_path: str = "data/schedules.db") -> None:
         """Initialize the manager and load any stored tasks."""
+
+
+    """Manage scheduled jobs using the schedule package and SQLite."""
+
+    def __init__(self, db_path: str = "data/schedules.db") -> None:
+        """Initialize the manager and load stored tasks."""
+
+    """Manage scheduled jobs using the :mod:`schedule` package with persistence."""
+
+    def __init__(self, db_path: str = "data/schedules.db") -> None:
+        """Initialize the manager and load any stored tasks.
+
+        Args:
+            db_path: Location of the SQLite database file.
+        """
+
+
         self.db_path = db_path
         os.makedirs(os.path.dirname(self.db_path) or ".", exist_ok=True)
 
@@ -27,7 +49,7 @@ class ScheduleManager:
         logger.log("ScheduleManager initialized")
 
     # ------------------------------------------------------------------
-    # SQLite setup and persistence helpers
+    # SQLite helpers
     # ------------------------------------------------------------------
     def _init_db(self) -> None:
         """Create required tables if they don't exist."""
@@ -60,8 +82,12 @@ class ScheduleManager:
             try:
                 mod = importlib.import_module(module)
                 func = getattr(mod, func_name)
+
             except Exception:
-                # Skip tasks that can't be imported
+                # Skip tasks that cannot be imported
+
+            except Exception:  # pragma: no cover - invalid modules ignored
+
                 continue
             job = schedule.every(interval).seconds.do(func)
             self.jobs[name] = job
@@ -90,7 +116,7 @@ class ScheduleManager:
             self.conn.execute("DELETE FROM schedules WHERE name = ?", (name,))
 
     # ------------------------------------------------------------------
-    # Public SQLite CRUD API
+    # Public CRUD API
     # ------------------------------------------------------------------
     def create_schedule(self, name: str, interval: int) -> None:
         """Insert a schedule record."""
@@ -121,6 +147,8 @@ class ScheduleManager:
             updated = cur.rowcount > 0
         if updated and name in self.jobs:
             func = self.jobs[name].job_func
+            if hasattr(func, "func"):
+                func = func.func
             schedule.cancel_job(self.jobs[name])
             self.jobs[name] = schedule.every(interval).seconds.do(func)
         return updated
@@ -152,6 +180,7 @@ class ScheduleManager:
         job = schedule.every(interval).seconds.do(func)
         self.jobs[name] = job
         logger.log(f"Added task '{name}' to run every {interval} seconds")
+
         self._persist_task(name, func, interval)
         return job
 
