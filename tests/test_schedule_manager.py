@@ -136,3 +136,25 @@ def test_removed_task_not_loaded(tmp_path):
     manager2 = ScheduleManager(db_path=str(db))
     assert manager2.list_tasks() == {}
 
+
+def test_update_schedule_reschedules_job(tmp_path):
+    schedule.clear()
+    db = tmp_path / "sched.db"
+    manager = ScheduleManager(db_path=str(db))
+
+    calls = []
+
+    def _task():
+        calls.append("run")
+
+    original_job = manager.add_task("task1", _task, 1)
+    assert original_job.interval == 1
+
+    assert manager.update_schedule("task1", 5) is True
+    updated_job = manager.list_tasks()["task1"]
+    assert updated_job is not original_job
+    assert updated_job.interval == 5
+    assert updated_job.job_func.func == original_job.job_func.func
+
+    manager.close()
+
