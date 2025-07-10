@@ -29,8 +29,20 @@ class FileHandler:
                 content = fp.read()
             logger.log(f"Read file: {path}")
             return content
+
         except (FileNotFoundError, PermissionError, OSError) as exc:
             logger.log(f"Failed to read file {path}: {exc}")
+
+
+        except FileNotFoundError:
+            logger.error(f"File not found: {path}")
+            raise
+        except PermissionError as exc:
+            logger.error(f"Permission denied reading {path}: {exc}")
+            raise
+        except OSError as exc:
+            logger.error(f"Failed to read file {path}: {exc}")
+
             raise
 
     def write(self, path: str, data: str) -> None:
@@ -53,5 +65,25 @@ class FileHandler:
             logger.log(f"Wrote file: {path}")
         except (PermissionError, OSError) as exc:
             logger.log(f"Failed to write file {path}: {exc}")
+
+
+            logger.info(f"Wrote file: {path}")
+        except PermissionError as exc:
+            logger.error(f"Permission denied writing {path}: {exc}")
+            raise
+
+        except OSError as exc:
+            logger.error(f"Failed to write file {path}: {exc}")
+
+
+
+
+        except (PermissionError, OSError) as exc:
+            logger.log(f"Failed to write file {path}: {exc}")
+
+
+
+
+
             raise
 
