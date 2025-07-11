@@ -19,23 +19,11 @@ class ScheduleManager:
     """Manage scheduled jobs using the :mod:`schedule` package with SQLite persistence."""
 
     def __init__(self, db_path: str = "data/schedules.db") -> None:
-        """Initialize the manager and load any stored tasks."""
-
-
-    """Manage scheduled jobs using the schedule package and SQLite."""
-
-    def __init__(self, db_path: str = "data/schedules.db") -> None:
-        """Initialize the manager and load stored tasks."""
-
-    """Manage scheduled jobs using the :mod:`schedule` package with persistence."""
-
-    def __init__(self, db_path: str = "data/schedules.db") -> None:
         """Initialize the manager and load any stored tasks.
 
         Args:
             db_path: Location of the SQLite database file.
         """
-
 
         self.db_path = db_path
         os.makedirs(os.path.dirname(self.db_path) or ".", exist_ok=True)
@@ -82,12 +70,8 @@ class ScheduleManager:
             try:
                 mod = importlib.import_module(module)
                 func = getattr(mod, func_name)
-
-            except Exception:
-                # Skip tasks that cannot be imported
-
             except Exception:  # pragma: no cover - invalid modules ignored
-
+                # Skip tasks that cannot be imported
                 continue
             job = schedule.every(interval).seconds.do(func)
             self.jobs[name] = job
