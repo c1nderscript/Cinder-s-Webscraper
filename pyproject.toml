@@ -21,6 +21,7 @@ cinder-web-scraper = "cinder_web_scraper.__main__:main"
 [project.optional-dependencies]
 dev = [
     "pytest==8.4.0",
+    "pytest-cov",
 ]
 
 [tool.setuptools.packages.find]
