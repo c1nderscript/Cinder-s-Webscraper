@@ -60,13 +60,16 @@ compatible Python interpreter.
    source venv/bin/activate
    ```
 
-4. Install the dependencies:
+4. Run the setup script to install dependencies and prepare the data directories (this creates the `data/` folders used by the tests):
 
    ```bash
+   ./setup.sh
+   # or
    pip install -r requirements.txt
    ```
 
-5. Run the test suite to verify your setup:
+
+5. After setup, run the test suite:
 
    ```bash
    pytest
@@ -289,7 +292,7 @@ Please see the [Developer Guide](docs/DEVELOPER_GUIDE.md) for detailed
 contribution instructions. In short:
 
 1. Fork the repository and create a feature branch.
-2. Install dependencies and run ``pytest`` before submitting a pull request.
+2. Run `./setup.sh` (or `pip install -r requirements.txt`) and then run `pytest` before submitting a pull request.
 3. Keep commits focused and provide clear descriptions of your changes.
 
 
