@@ -232,6 +232,8 @@ A basic Tkinter interface is provided in `cinder_web_scraper/gui`. To start the 
 python -m cinder_web_scraper.gui.main_window
 ```
 
+For detailed launch instructions, see [docs/gui_launch.md](docs/gui_launch.md).
+
 The GUI currently contains placeholder widgets but demonstrates how to integrate the scheduling system. The recent tasks added docstrings and type hints across these modules, making it easier to understand and extend the GUI code.
 
 ## Configuration Files
