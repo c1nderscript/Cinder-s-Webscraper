@@ -19,17 +19,6 @@ class ScheduleManager:
     """Manage scheduled jobs using the :mod:`schedule` package with SQLite persistence."""
 
     def __init__(self, db_path: str = "data/schedules.db") -> None:
-        """Initialize the manager and load any stored tasks."""
-
-
-    """Manage scheduled jobs using the schedule package and SQLite."""
-
-    def __init__(self, db_path: str = "data/schedules.db") -> None:
-        """Initialize the manager and load stored tasks."""
-
-    """Manage scheduled jobs using the :mod:`schedule` package with persistence."""
-
-    def __init__(self, db_path: str = "data/schedules.db") -> None:
         """Initialize the manager and load any stored tasks.
 
         Args:
