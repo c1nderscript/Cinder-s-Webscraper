@@ -102,7 +102,6 @@ cinder-webscraper/
 │   ├── schedules.db            # SQLite scheduling database
 │   └── logs/                   # Application logs
 ├── output/                     # Scraped data output directory
-│   └── scraped_data/
 ├── requirements.txt            # Python dependencies
 ├── main.py                     # Application entry point
 ├── pytest.ini                 # Test configuration

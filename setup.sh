@@ -5,7 +5,7 @@ set -e
 pip install -r requirements.txt
 
 # Prepare required directories
-mkdir -p data/logs output/scraped_data
+mkdir -p data/logs output
 
 # Create empty config files if missing
 : > data/websites.json
