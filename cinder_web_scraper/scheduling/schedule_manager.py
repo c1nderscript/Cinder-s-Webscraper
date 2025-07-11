@@ -16,7 +16,17 @@ from cinder_web_scraper.utils.logger import default_logger as logger
 
 class ScheduleManager:
 
-    """Manage scheduled jobs using the :mod:`schedule` package with SQLite persistence."""
+    """Manage scheduled jobs using the :mod:`schedule` package with SQLite persistence.
+
+    The manager can be used as a context manager to ensure the underlying
+    SQLite connection is closed automatically::
+
+        with ScheduleManager() as manager:
+            manager.add_task("dummy", dummy_job, 5)
+            manager.run_pending()
+
+    When the ``with`` block exits, :pymeth:`close` is called automatically.
+    """
 
     def __init__(self, db_path: str = "data/schedules.db") -> None:
         """Initialize the manager and load any stored tasks.
@@ -196,6 +206,14 @@ class ScheduleManager:
     def close(self) -> None:
         """Close the underlying SQLite connection."""
         self.conn.close()
+
+    def __enter__(self) -> "ScheduleManager":
+        """Return the manager instance for context manager support."""
+        return self
+
+    def __exit__(self, exc_type, exc, tb) -> None:
+        """Close the SQLite connection when exiting a ``with`` block."""
+        self.close()
 
     def __del__(self) -> None:
         try:

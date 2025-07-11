@@ -266,7 +266,17 @@ When the button is pressed the application executes `git pull` in the project fo
 
 1. Edit `data/websites.json` to define the URLs and CSS selectors to scrape.
 2. Launch the GUI to schedule scraping tasks at custom intervals.
-3. The `ScheduleManager` (recently documented and tested) handles task timing.
+3. The `ScheduleManager` handles task timing and can be used as a context
+   manager for automatic cleanup:
+
+   ```python
+   from cinder_web_scraper.scheduling import ScheduleManager
+
+   with ScheduleManager() as manager:
+       manager.add_task("demo", lambda: print("run"), 5)
+       manager.run_pending()
+   ```
+
 4. Results are saved under `output/` using the `OutputManager` placeholder.
 
 This workflow highlights the new configuration tests and schedule manager features added in the previous tasks.
