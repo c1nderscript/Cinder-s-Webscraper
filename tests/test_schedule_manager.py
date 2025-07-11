@@ -1,5 +1,6 @@
 import schedule
 import pytest
+import sqlite3
 try:
     from cinder_web_scraper.scheduling.schedule_manager import ScheduleManager
 except Exception as exc:  # pragma: no cover - skip if module fails to import
@@ -157,4 +158,15 @@ def test_update_schedule_reschedules_job(tmp_path):
     assert updated_job.job_func.func == original_job.job_func.func
 
     manager.close()
+
+
+def test_context_manager_closes_connection(tmp_path):
+    schedule.clear()
+    db = tmp_path / "sched.db"
+    with ScheduleManager(db_path=str(db)) as manager:
+        conn = manager.conn
+        manager.add_task("task1", dummy, 1)
+        conn.execute("SELECT 1")
+    with pytest.raises(sqlite3.ProgrammingError):
+        conn.execute("SELECT 1")
 
