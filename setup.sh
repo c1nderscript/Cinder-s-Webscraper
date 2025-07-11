@@ -8,8 +8,14 @@ pip install -r requirements.txt
 mkdir -p data/logs output
 
 # Create empty config files if missing
-: > data/websites.json
-: > data/schedules.db
+if [ ! -f data/websites.json ]; then
+  touch data/websites.json
+fi
+
+if [ ! -f data/schedules.db ]; then
+  touch data/schedules.db
+fi
+
 if [ ! -f data/config.json ]; then
-  : > data/config.json
+  touch data/config.json
 fi
