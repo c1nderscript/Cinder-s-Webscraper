@@ -10,13 +10,23 @@ from cinder_web_scraper.scheduling.schedule_manager import ScheduleManager
 from cinder_web_scraper.utils.logger import default_logger as logger
 
 
-def parse_arguments() -> argparse.Namespace:
+def parse_arguments(args: list[str] | None = None) -> argparse.Namespace:
+    """Parse command line arguments.
+
+    Args:
+        args: Optional list of command line arguments to parse. If ``None``,
+            ``sys.argv`` values are used.
+
+    Returns:
+        Parsed argument namespace.
+    """
+
     parser = argparse.ArgumentParser(description="Cinder's Web Scraper")
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--gui", action="store_true", help="Launch in GUI mode")
     group.add_argument("--cli", action="store_true", help="Launch in CLI mode")
     parser.add_argument("--debug", action="store_true", help="Enable debug logging")
-    return parser.parse_args()
+    return parser.parse_args(args)
 
 
 def run_cli() -> None:
