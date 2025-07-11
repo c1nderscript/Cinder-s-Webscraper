@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 from cinder_web_scraper.scraping.output_manager import OutputManager
+import cinder_web_scraper.scraping.output_manager as output_manager
 
 
 @pytest.fixture
@@ -39,3 +40,16 @@ def test_save_text_nested(manager):
     p = Path("output/nested/hello.txt")
     assert p.exists()
     assert p.read_text() == data
+
+
+def test_save_error_logs(manager, monkeypatch):
+    def raise_error(*args, **kwargs):
+        raise OSError("boom")
+
+    monkeypatch.setattr(Path, "open", raise_error)
+    messages = []
+    monkeypatch.setattr(output_manager.logger, "error", lambda msg: messages.append(msg))
+
+    assert manager.save({}, "fail.json") is False
+    assert messages
+    assert "Failed to save data to" in messages[0]

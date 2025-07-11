@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import csv
 import json
-import os
 from pathlib import Path
 from typing import Any
 
@@ -74,6 +73,7 @@ class OutputManager:
                     else:
                         fp.write(str(data))
             return True
-        except OSError:
+        except OSError as exc:
+            logger.error(f"Failed to save data to {dest}: {exc}")
             return False
 
