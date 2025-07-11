@@ -2,7 +2,7 @@ import schedule
 import pytest
 try:
     from cinder_web_scraper.scheduling.schedule_manager import ScheduleManager
-except Exception as exc:  # pragma: no cover - skip if module fails to import
+except ImportError as exc:  # pragma: no cover - skip if module missing
     pytest.skip(f"ScheduleManager unavailable: {exc}", allow_module_level=True)
 
 
