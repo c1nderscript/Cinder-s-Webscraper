@@ -8,8 +8,6 @@
 
 Cinder's Web Scraper is a Windows-focused GUI application that helps you configure and schedule web scraping tasks without writing code. Configuration is stored in easy-to-edit JSON files and the application manages recurring jobs using the [`schedule`](https://pypi.org/project/schedule/) library.
 
-A GUI-based web scraper application for Windows systems built with Python. The application enables users to configure, schedule, and manage web scraping tasks through an intuitive interface. Configuration files are stored in JSON format and saved under the `data/` directory.
-
 
 ## Features
 
@@ -28,8 +26,6 @@ This repository currently contains a minimal scheduling example, but the directo
 2. Install the project dependencies:
 
 
-- Requires **Python 3.8+**
-- Install the package and its dependencies:
 
 ```bash
 pip install .
@@ -39,6 +35,7 @@ For development, include optional dependencies:
 
 ```bash
 pip install .[dev]
+```
 
 Follow these steps to get a local development environment running on
 Windows 10/11. The instructions also work on other platforms with a
@@ -170,10 +167,6 @@ python -m cinder_web_scraper.gui.main_window
 
 As features are implemented, this will provide buttons to manage websites, scheduling options, and view logs.
 
-### Updating the repository
-
-Use the **Tools → Update** menu item in the GUI to run ``git pull`` and refresh
-the local code. A message box reports whether the update succeeded.
 
 ## Example Workflow
 
@@ -199,28 +192,6 @@ logging.basicConfig(
 )
 ```
 
-## Contributing
-
-Contributions are welcome! Please run `pytest` before submitting a pull request.
-
-and a job named ``dummy`` will run every five seconds until you press
-``Ctrl+C``.
-
-### Graphical interface
-
-A basic Tkinter interface is included but is still under development. You
-can experiment with the placeholder window using the following snippet:
-
-```bash
-python - <<'PY'
-from cinder_web_scraper.gui.main_window import MainWindow
-
-window = MainWindow()
-window.show()
-PY
-```
-
-Future releases will bundle a launcher script that opens the GUI directly.
 
 ## Updating the Repository
 
