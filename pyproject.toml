@@ -16,7 +16,7 @@ dependencies = [
 ]
 
 [project.scripts]
-cinder-web-scraper = "cinder_web_scraper.__main__:main"
+cinder-web-scraper = "cinder_web_scraper.main:main"
 
 [project.optional-dependencies]
 dev = [
