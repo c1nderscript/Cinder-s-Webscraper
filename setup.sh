@@ -9,7 +9,12 @@ mkdir -p data/logs output
 
 # Create empty config files if missing
 : > data/websites.json
-: > data/schedules.db
+if [ ! -f data/schedules.db ]; then
+  python - <<'EOF'
+from cinder_web_scraper.scheduling.schedule_manager import ScheduleManager
+ScheduleManager("data/schedules.db").close()
+EOF
+fi
 if [ ! -f data/config.json ]; then
   : > data/config.json
 fi
