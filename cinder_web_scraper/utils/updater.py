@@ -1,31 +1,31 @@
-
-"""Utilities for updating the local repository."""
-
 """Utilities for updating the application from a Git repository."""
-
 
 from __future__ import annotations
 
 import subprocess
-
 from typing import Tuple
-
 
 from .logger import get_logger
 
 logger = get_logger(__name__)
 
 
-
-def update_repo() -> bool:
+def update_repo(remote: str = "origin") -> bool:
     """Run ``git pull`` to update the repository.
 
-    Returns:
+    Parameters
+    ----------
+    remote:
+        Name of the git remote to pull from.
+
+    Returns
+    -------
+    bool
         ``True`` if the command succeeds, otherwise ``False``.
     """
     try:
         subprocess.run(
-            ["git", "pull"],
+            ["git", "pull", remote],
             check=True,
             capture_output=True,
             text=True,
@@ -33,8 +33,9 @@ def update_repo() -> bool:
         logger.info("Repository updated via git pull")
         return True
     except (subprocess.CalledProcessError, OSError) as exc:
-        logger.error(f"Git pull failed: {exc}")
+        logger.error("Git pull failed: %s", exc)
         return False
+
 
 def update_application() -> Tuple[bool, str]:
     """Update the application by pulling the latest changes.
@@ -61,4 +62,3 @@ def update_application() -> Tuple[bool, str]:
     except OSError as exc:  # Network or OS issues
         logger.error("Failed to run git pull: %s", exc)
         return False, str(exc)
-

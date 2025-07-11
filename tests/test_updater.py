@@ -1,7 +1,8 @@
-
 from unittest.mock import patch
+import subprocess
 
 from cinder_web_scraper.utils import updater
+from cinder_web_scraper.utils.updater import update_application
 
 
 @patch('cinder_web_scraper.utils.updater.subprocess.run')
@@ -9,15 +10,11 @@ def test_update_repo_calls_git_pull(mock_run):
     mock_run.return_value = None
     assert updater.update_repo() is True
     mock_run.assert_called_once_with(
-        ['git', 'pull'], check=True, capture_output=True, text=True
+        ['git', 'pull', 'origin'],
+        check=True,
+        capture_output=True,
+        text=True,
     )
-
-import subprocess
-from unittest.mock import patch
-
-import pytest
-
-from cinder_web_scraper.utils.updater import update_application
 
 
 def test_update_application_success():
@@ -36,4 +33,3 @@ def test_update_application_failure():
         run.assert_called_once()
         assert success is False
         assert 'fail' in msg
-
