@@ -11,6 +11,11 @@ from cinder_web_scraper.utils.logger import default_logger as logger
 
 
 def parse_arguments() -> argparse.Namespace:
+    """Parse command-line arguments.
+
+    Returns:
+        argparse.Namespace: Parsed options.
+    """
     parser = argparse.ArgumentParser(description="Cinder's Web Scraper")
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--gui", action="store_true", help="Launch in GUI mode")
@@ -20,6 +25,7 @@ def parse_arguments() -> argparse.Namespace:
 
 
 def run_cli() -> None:
+    """Execute the command-line scheduler loop."""
     manager = ScheduleManager()
     if not manager.list_tasks():
         manager.add_task("dummy", lambda: logger.log("Dummy job executed"), 5)
@@ -41,11 +47,16 @@ def run_cli() -> None:
 
 
 def run_gui() -> None:
+    """Launch the GUI application."""
     window = MainWindow()
     window.show()
 
 
 def main() -> None:
+    """Application entry point.
+
+    Parses command-line options and launches either the CLI or GUI.
+    """
     args = parse_arguments()
     if args.debug:
         logging.getLogger().setLevel(logging.DEBUG)
