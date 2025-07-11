@@ -7,7 +7,6 @@ import traceback
 
 from cinder_web_scraper.gui.main_window import MainWindow
 from cinder_web_scraper.scheduling.schedule_manager import ScheduleManager
-from cinder_web_scraper.utils.logger import default_logger as logger
 from cinder_web_scraper.utils.logger import get_logger
 
 
