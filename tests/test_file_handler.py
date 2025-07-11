@@ -12,7 +12,6 @@ def test_read_write(tmp_path):
     content = handler.read(str(file_path))
     assert content == "hello world"
 
-import os
 
 
 @pytest.fixture()
