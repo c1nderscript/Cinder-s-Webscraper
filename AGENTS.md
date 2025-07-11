@@ -103,9 +103,9 @@ cinder-webscraper/
 │   └── logs/                   # Application logs
 ├── output/                     # Scraped data output directory
 ├── requirements.txt            # Python dependencies
-├── main.py                     # Application entry point
 ├── pytest.ini                 # Test configuration
-└── README.md
+├── README.md
+└── cinder_web_scraper/__main__.py # Package entry point
 ```
 
 ## Technology Stack
@@ -379,7 +379,7 @@ def get_scraping_config() -> Dict[str, Any]:
 ### Installation Steps
 1. Clone the repository
 2. Install required packages: `pip install -r requirements.txt`
-3. Run the application: `python main.py`
+3. Run the application: `python -m cinder_web_scraper`
 
 ## Current Task Context
 
