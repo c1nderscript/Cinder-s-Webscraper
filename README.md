@@ -1,6 +1,6 @@
 # Cinder's Web Scraper
 
-[![CI](https://github.com/OWNER/Cinder-s-Webscraper/actions/workflows/python.yml/badge.svg)](https://github.com/OWNER/Cinder-s-Webscraper/actions/workflows/python.yml)
+[![CI](https://github.com/c1nderscript/Cinder-s-Webscraper/actions/workflows/python.yml/badge.svg)](https://github.com/c1nderscript/Cinder-s-Webscraper/actions/workflows/python.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue)](#license)
 
 ## Project Overview
@@ -46,8 +46,8 @@ compatible Python interpreter.
 2. Clone this repository:
 
    ```bash
-   git clone https://github.com/your-user/cinder-webscraper.git
-   cd cinder-webscraper
+   git clone https://github.com/c1nderscript/Cinder-s-Webscraper.git
+   cd Cinder-s-Webscraper
    ```
 
 3. (Optional) Create and activate a virtual environment:
