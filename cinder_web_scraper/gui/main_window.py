@@ -49,10 +49,26 @@ class MainWindow:
         self.root.config(menu=menubar)
 
         toolbar = ttk.Frame(self.root)
-        ttk.Button(toolbar, text="Add Site", command=self._on_manage_sites).pack(side=tk.LEFT, padx=2, pady=2)
-        ttk.Button(toolbar, text="Start Scraping", command=self._start_scraping).pack(side=tk.LEFT, padx=2, pady=2)
-        ttk.Button(toolbar, text="Settings", command=self._on_settings).pack(side=tk.LEFT, padx=2, pady=2)
-        ttk.Button(toolbar, text="Update", command=self._update_app).pack(side=tk.LEFT, padx=2, pady=2)
+        ttk.Button(
+            toolbar,
+            text="Add Site",
+            command=self._on_manage_sites,
+        ).pack(side=tk.LEFT, padx=2, pady=2)
+        ttk.Button(
+            toolbar,
+            text="Start Scraping",
+            command=self._start_scraping,
+        ).pack(side=tk.LEFT, padx=2, pady=2)
+        ttk.Button(
+            toolbar,
+            text="Settings",
+            command=self._on_settings,
+        ).pack(side=tk.LEFT, padx=2, pady=2)
+        ttk.Button(
+            toolbar,
+            text="Update",
+            command=self._update_app,
+        ).pack(side=tk.LEFT, padx=2, pady=2)
         toolbar.pack(fill=tk.X)
 
         list_frame = ttk.Frame(self.root)
@@ -69,7 +85,11 @@ class MainWindow:
         ttk.Button(actions, text="Start", command=self._start_scraping).pack(side=tk.LEFT, padx=5)
         ttk.Button(actions, text="Stop", command=self._stop_scraping).pack(side=tk.LEFT, padx=5)
         ttk.Button(actions, text="Schedule", command=self._on_schedule).pack(side=tk.LEFT, padx=5)
-        ttk.Button(actions, text="Configure", command=self._on_manage_sites).pack(side=tk.LEFT, padx=5)
+        ttk.Button(
+            actions,
+            text="Configure",
+            command=self._on_manage_sites,
+        ).pack(side=tk.LEFT, padx=5)
         actions.pack(pady=5)
 
         status = ttk.Label(self.root, textvariable=self.status_var, relief=tk.SUNKEN, anchor=tk.W)
@@ -115,4 +135,3 @@ class MainWindow:
                 "An unexpected error occurred. See log for details.",
             )
             log_exception(logger, "Unhandled exception in GUI", exc)
-
