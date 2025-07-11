@@ -1,4 +1,4 @@
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 from cinder_web_scraper.gui.main_window import MainWindow
 from cinder_web_scraper.gui.scheduler_dialog import SchedulerDialog
 from cinder_web_scraper.gui.settings_panel import SettingsPanel

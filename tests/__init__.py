@@ -1,6 +1,5 @@
 import sys
 from pathlib import Path
-import importlib
 
 # Allow importing modules from the package directory when tests are run as a package
 package_path = Path(__file__).resolve().parents[1] / "cinder_web_scraper"

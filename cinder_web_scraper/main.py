@@ -32,7 +32,7 @@ def run_cli() -> None:
     except KeyboardInterrupt:
         logger.log("Scheduler stopped.")
         print("\nScheduler stopped.")
-    except Exception as exc:  # pragma: no cover
+    except Exception:  # pragma: no cover
         print("An unexpected error occurred. See log for details.")
         logger.error("Unhandled exception in CLI")
         logger.error(traceback.format_exc())
