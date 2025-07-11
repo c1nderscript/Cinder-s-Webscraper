@@ -7,7 +7,6 @@ import traceback
 
 from cinder_web_scraper.gui.main_window import MainWindow
 from cinder_web_scraper.scheduling.schedule_manager import ScheduleManager
-from cinder_web_scraper.utils.logger import default_logger as logger
 from cinder_web_scraper.utils.logger import get_logger
 
 
@@ -26,15 +25,15 @@ def parse_arguments() -> argparse.Namespace:
 def run_cli() -> None:
     manager = ScheduleManager()
     if not manager.list_tasks():
-        manager.add_task("dummy", lambda: logger.log("Dummy job executed"), 5)
+        manager.add_task("dummy", lambda: logger.info("Dummy job executed"), 5)
 
-    logger.log("Scheduler started. Press Ctrl+C to exit.")
+    logger.info("Scheduler started. Press Ctrl+C to exit.")
     try:
         while True:
             manager.run_pending()
             time.sleep(1)
     except KeyboardInterrupt:
-        logger.log("Scheduler stopped.")
+        logger.info("Scheduler stopped.")
         print("\nScheduler stopped.")
     except Exception as exc:  # pragma: no cover
         print("An unexpected error occurred. See log for details.")
