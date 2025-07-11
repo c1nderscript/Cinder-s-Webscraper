@@ -53,6 +53,13 @@ class SettingsPanel:
         )
 
     def _save(self) -> None:
+        """Save settings and close the panel.
+
+        The current logging option is persisted to ``data/config.json`` using
+        ``config_manager``. A message box notifies the user whether the save was
+        successful and the settings window is closed afterwards.
+        """
+
         assert self.logging_var is not None
         self.settings["logging"] = self.logging_var.get()
         config = config_manager.load_config("data/config.json")
