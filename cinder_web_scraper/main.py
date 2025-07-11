@@ -1,29 +1,32 @@
-"""Command-line entry point for running scheduled jobs."""
-
 from __future__ import annotations
 
+import argparse
+import logging
 import time
 import traceback
 
+from cinder_web_scraper.gui.main_window import MainWindow
 from cinder_web_scraper.scheduling.schedule_manager import ScheduleManager
 from cinder_web_scraper.utils.logger import default_logger as logger
 from cinder_web_scraper.utils.logger import get_logger
 
 
-def dummy_job() -> None:
-    """Example job that prints a message."""
-    logger.log("Dummy job executed")
-
-
 logger = get_logger(__name__)
 
 
-def main() -> None:
-    """Run the simple command-line scheduler demo with persistence and error handling."""
-    manager = ScheduleManager()
+def parse_arguments() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Cinder's Web Scraper")
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("--gui", action="store_true", help="Launch in GUI mode")
+    group.add_argument("--cli", action="store_true", help="Launch in CLI mode")
+    parser.add_argument("--debug", action="store_true", help="Enable debug logging")
+    return parser.parse_args()
 
+
+def run_cli() -> None:
+    manager = ScheduleManager()
     if not manager.list_tasks():
-        manager.add_task("dummy", dummy_job, 5)
+        manager.add_task("dummy", lambda: logger.log("Dummy job executed"), 5)
 
     logger.log("Scheduler started. Press Ctrl+C to exit.")
     try:
@@ -33,7 +36,7 @@ def main() -> None:
     except KeyboardInterrupt:
         logger.log("Scheduler stopped.")
         print("\nScheduler stopped.")
-    except Exception as exc:  # pragma: no cover - runtime errors
+    except Exception as exc:  # pragma: no cover
         print("An unexpected error occurred. See log for details.")
         logger.error("Unhandled exception in CLI")
         logger.error(traceback.format_exc())
@@ -41,5 +44,22 @@ def main() -> None:
         manager.close()
 
 
+def run_gui() -> None:
+    window = MainWindow()
+    window.show()
+
+
+def main() -> None:
+    args = parse_arguments()
+    if args.debug:
+        logging.getLogger().setLevel(logging.DEBUG)
+
+    if args.cli:
+        run_cli()
+    else:
+        run_gui()
+
+
 if __name__ == "__main__":
     main()
+
