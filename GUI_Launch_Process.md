@@ -182,8 +182,8 @@ from pathlib import Path
 
 # Import application modules
 from gui.main_window import MainWindow
-from core.config_manager import ConfigManager, ConfigError
-from core.schedule_manager import ScheduleManager, ScheduleError
+from cinder_web_scraper.utils.config_manager import ConfigManager, ConfigError
+from cinder_web_scraper.scheduling.schedule_manager import ScheduleManager, ScheduleError
 from cli.cli_interface import CLIInterface
 
 # Configure logging
