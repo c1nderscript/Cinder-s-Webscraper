@@ -1,10 +1,16 @@
-# Application dependencies
-
-schedule==1.2.2
-requests
-beautifulsoup4
-
-# Development dependencies
+beautifulsoup4==4.13.4
+certifi==2025.7.9
+charset-normalizer==3.4.2
+coverage==7.9.2
+idna==3.10
+iniconfig==2.1.0
+packaging==25.0
+pluggy==1.6.0
+Pygments==2.19.2
 pytest==8.4.0
-pytest-cov
-
+pytest-cov==6.2.1
+requests==2.32.4
+schedule==1.2.2
+soupsieve==2.7
+typing_extensions==4.14.1
+urllib3==2.5.0
